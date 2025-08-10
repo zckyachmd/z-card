@@ -1,0 +1,10 @@
+echo "🔎 Type-checking..."
+pnpm type-check || { echo "❌ Type errors found."; exit 1; }
+
+echo "🧹 Lint (project-wide)..."
+pnpm lint || { echo "❌ ESLint errors."; exit 1; }
+
+echo "🧾 Prettier check..."
+pnpm format:check || { echo "❌ Prettier formatting issues."; exit 1; }
+
+echo "✅ All good. Pushing..."

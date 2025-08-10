@@ -6,11 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "prepare": "husky install",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
-    "prepare": "husky install"
+    "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx,css,md}": [
