@@ -1,7 +1,5 @@
-import * as tailwind from 'prettier-plugin-tailwindcss'
-
 /** @type {import('prettier').Config} */
-export default {
+module.exports = {
   semi: false,
   singleQuote: true,
   jsxSingleQuote: true,
@@ -10,5 +8,6 @@ export default {
   trailingComma: 'all',
   bracketSpacing: true,
   arrowParens: 'avoid',
-  plugins: [tailwind],
+  endOfLine: 'auto',
+  plugins: ['prettier-plugin-tailwindcss'],
 }

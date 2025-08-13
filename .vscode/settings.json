@@ -1,10 +1,11 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.requireConfig": true,
+  "prettier.resolveGlobalModules": false,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
-  "prettier.requireConfig": true,
   "prettier.prettierPath": "node_modules/prettier",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
