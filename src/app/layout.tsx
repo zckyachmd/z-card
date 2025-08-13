@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import Footer from '@/components/footer'
@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swa
 export const metadata: Metadata = {
   title: 'Zacky Achmad — Full-Stack Web Developer',
   description:
-    'Portfolio of Zacky Achmad, a back‑end leaning full‑stack web developer based in Cimahi, Indonesia. Clean, secure, and efficient systems.',
+    'Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Cimahi, Indonesia. Clean, secure, and efficient systems.',
   metadataBase: new URL('https://zacky.id'),
   alternates: { canonical: '/' },
   openGraph: {
@@ -27,14 +27,29 @@ export const metadata: Metadata = {
     title: 'Zacky Achmad — Full-Stack Web Developer',
     description: 'Clean, secure, and efficient systems.',
   },
-  icons: { icon: '/favicon.ico' },
-}
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  icons: {
+    icon: [
+      { url: '/favicon/favicon.ico' },
+      { url: '/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [{ url: '/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    other: [
+      {
+        rel: 'android-chrome',
+        url: '/favicon/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        rel: 'android-chrome',
+        url: '/favicon/android-chrome-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+      { rel: 'manifest', url: '/favicon/site.webmanifest' },
+    ],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
