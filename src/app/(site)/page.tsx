@@ -1,7 +1,7 @@
-import About from './_components/about'
-import Contact from './_components/contact'
-import Hero from './_components/hero'
-import Projects from './_components/projects'
+import About from '@/app/(site)/_components/about'
+import Contact from '@/app/(site)/_components/contact'
+import Hero from '@/app/(site)/_components/hero'
+import Projects from '@/app/(site)/_components/projects'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'

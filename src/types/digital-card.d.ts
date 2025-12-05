@@ -1,3 +1,9 @@
+/**
+ * Digital Card Type Definitions
+ *
+ * Types for digital business card component
+ */
+
 export type QRMode = 'vcard' | 'url'
 
 export interface DigitalCardData {

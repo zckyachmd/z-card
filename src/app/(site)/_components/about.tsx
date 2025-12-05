@@ -1,7 +1,6 @@
 'use client'
 
-import type { ComponentType } from 'react'
-import React from 'react'
+import { type ComponentType, useState } from 'react'
 import { Boxes, Briefcase, GraduationCap, MonitorSmartphone, Server, Wrench } from 'lucide-react'
 
 import Section from '@/components/section'
@@ -270,7 +269,7 @@ function Timeline({
   maxVisible?: number
   collapsible?: boolean
 }) {
-  const [expanded, setExpanded] = React.useState(false)
+  const [expanded, setExpanded] = useState(false)
   const hasOverflow = collapsible && items.length > maxVisible
   const visible = expanded || !hasOverflow ? items : items.slice(0, maxVisible)
 

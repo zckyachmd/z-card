@@ -14,8 +14,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { site } from '@/config/site'
-import { buildVCard, buildWebsite } from '@/lib/site-helpers'
-import type { DigitalCardData, DigitalCardProps } from '@/types/digital-card'
+import { buildVCard, buildWebsite } from '@/lib/siteHelpers'
+import type { DigitalCardData, DigitalCardProps } from '@/types'
 
 const defaults: DigitalCardData = {
   firstName: site.name.first,

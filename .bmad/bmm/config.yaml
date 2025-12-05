@@ -10,8 +10,8 @@ output_folder: docs
 sprint_artifacts: docs/sprint-artifacts
 
 # Language Configuration
-communication_language: en
-document_output_language: en
+communication_language: id
+document_output_language: id
 
 # User Skill Level
 # Options: beginner, intermediate, advanced, expert

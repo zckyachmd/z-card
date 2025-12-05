@@ -1,5 +1,5 @@
 import { site } from '@/config/site'
-import type { DigitalCardData } from '@/types/digital-card'
+import type { DigitalCardData } from '@/types'
 
 export const personLdJson = () => ({
   '@context': 'https://schema.org',
