@@ -27,7 +27,8 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile --prefer-offline
 # Copy the rest of your source code
 COPY . .
-# Build Next.js (recommend `output: 'standalone'` in next.config.*)
+# Build Next.js with standalone output for Docker
+ENV DOCKER_BUILD=true
 RUN pnpm build
 
 # -------- Runtime (tiny, secure) --------

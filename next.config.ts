@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   compress: true,
   poweredByHeader: false,
+  // Standalone output for Docker (more efficient)
+  // Only enable in Docker build environment
+  ...(process.env.DOCKER_BUILD === 'true' && {
+    output: 'standalone',
+  }),
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
