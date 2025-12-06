@@ -2,11 +2,13 @@
 
 import * as React from 'react'
 import { Send } from 'lucide-react'
+import { toast } from 'sonner'
 
 import CloudflareTurnstile from '@/components/cloudflare-turnstile'
 import Section from '@/components/section'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { getTurnstileSiteKey, isTurnstileEnabledClient } from '@/lib/turnstile-config'
 import type { ContactFormResponse } from '@/types'
 
 export default function Contact() {
@@ -16,10 +18,12 @@ export default function Contact() {
   const [honeypot, setHoneypot] = React.useState('')
   const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
-  const [success, setSuccess] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
   const [formLoadTime] = React.useState(() => Date.now())
-  const turnstileSiteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ''
+  // Note: Client checks NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY to show widget
+  // Server checks CLOUDFLARE_TURNSTILE_SECRET_KEY to verify tokens
+  // Both keys should be configured together. If only one is set, validation will be inconsistent.
+  const turnstileEnabled = isTurnstileEnabledClient()
+  const turnstileSiteKey = getTurnstileSiteKey()
 
   // Client-side validation
   function validateForm(): string | null {
@@ -50,19 +54,20 @@ export default function Contact() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setError(null)
-    setSuccess(false)
 
     // Client-side validation
     const validationError = validateForm()
     if (validationError) {
-      setError(validationError)
+      toast.error(validationError)
       return
     }
 
-    // Check Turnstile token if site key is configured
-    if (turnstileSiteKey && !turnstileToken) {
-      setError('Please complete the CAPTCHA verification')
+    // Check Turnstile token if Turnstile is enabled on client
+    // Note: This checks NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY (client-side)
+    // Server will check CLOUDFLARE_TURNSTILE_SECRET_KEY (server-side)
+    // If only one key is configured, there will be a validation mismatch
+    if (turnstileEnabled && !turnstileToken) {
+      toast.error('Please complete the CAPTCHA verification')
       return
     }
 
@@ -91,25 +96,20 @@ export default function Contact() {
       const data = (await response.json()) as ContactFormResponse
 
       if (!response.ok || !data.success) {
-        setError(data.error || 'Failed to send message. Please try again.')
+        toast.error(data.error || 'Failed to send message. Please try again.')
         setSubmitting(false)
         return
       }
 
       // Success
-      setSuccess(true)
+      toast.success("Message sent successfully! I'll get back to you soon.")
       setName('')
       setEmail('')
       setMessage('')
       setHoneypot('')
       setTurnstileToken(null) // Reset Turnstile token
-
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSuccess(false)
-      }, 5000)
     } catch (err) {
-      setError(
+      toast.error(
         err instanceof Error
           ? `Network error: ${err.message}`
           : 'Failed to send message. Please check your connection and try again.',
@@ -143,28 +143,6 @@ export default function Contact() {
               </CardHeader>
 
               <CardContent className='grid gap-4 sm:gap-5'>
-                {/* Success Message */}
-                {success && (
-                  <div
-                    className='rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200'
-                    role='alert'
-                    aria-live='polite'
-                  >
-                    Message sent successfully! I&apos;ll get back to you soon.
-                  </div>
-                )}
-
-                {/* Error Message */}
-                {error && (
-                  <div
-                    className='rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200'
-                    role='alert'
-                    aria-live='polite'
-                  >
-                    {error}
-                  </div>
-                )}
-
                 {/* Honeypot field (hidden from users, bots will fill it) */}
                 <input
                   type='text'
@@ -242,15 +220,14 @@ export default function Contact() {
                       siteKey={turnstileSiteKey}
                       onVerify={token => {
                         setTurnstileToken(token)
-                        setError(null) // Clear any previous CAPTCHA errors
                       }}
                       onError={() => {
                         setTurnstileToken(null)
-                        setError('CAPTCHA verification failed. Please try again.')
+                        toast.error('CAPTCHA verification failed. Please try again.')
                       }}
                       onExpire={() => {
                         setTurnstileToken(null)
-                        setError('CAPTCHA expired. Please verify again.')
+                        toast.error('CAPTCHA expired. Please verify again.')
                       }}
                       theme='auto'
                       size='normal'
@@ -270,13 +247,7 @@ export default function Contact() {
                   {submitting ? 'Sending…' : 'Send'}
                 </Button>
                 <span className='sr-only' aria-live='polite'>
-                  {submitting
-                    ? 'Sending message…'
-                    : success
-                      ? 'Message sent successfully'
-                      : error
-                        ? `Error: ${error}`
-                        : ''}
+                  {submitting ? 'Sending message…' : ''}
                 </span>
               </CardFooter>
             </form>

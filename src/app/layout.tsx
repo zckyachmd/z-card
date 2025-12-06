@@ -5,6 +5,7 @@ import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
 import SkipLink from '@/components/skip-link'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/sonner'
 
 import './globals.css'
 const inter = Inter({
@@ -114,6 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main id='main-content'>{children}</main>
           <Footer />
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   )

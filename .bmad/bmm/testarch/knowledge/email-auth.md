@@ -70,7 +70,7 @@ async function getMagicLinkFromEmail(email: string): Promise<string> {
     throw new Error(`Magic link not found in email to ${email}`);
   }
 
-  console.log(`📧 Email received. Magic link extracted: ${magicLink}`);
+  console.log(`Email received. Magic link extracted: ${magicLink}`);
   return magicLink;
 }
 
@@ -223,7 +223,7 @@ export const test = base.extend<EmailAuthFixture>({
         return;
       }
     } catch (error) {
-      console.log(`📧 No cached session, requesting magic link for ${testEmail}`);
+      console.log(`No cached session, requesting magic link for ${testEmail}`);
     }
 
     // Request new magic link

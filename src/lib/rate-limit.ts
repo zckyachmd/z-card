@@ -74,20 +74,51 @@ export function checkRateLimit(ip: string): {
 }
 
 /**
+ * Validate IP address format (IPv4 or IPv6)
+ */
+function isValidIP(ip: string): boolean {
+  // IPv4 regex
+  const ipv4Regex =
+    /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+  // IPv6 regex (simplified - covers most cases)
+  const ipv6Regex =
+    /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|^::1$|^::$|^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}$/
+  return ipv4Regex.test(ip) || ipv6Regex.test(ip)
+}
+
+/**
+ * Sanitize IP address to prevent injection
+ */
+function sanitizeIP(ip: string): string {
+  // Remove any non-IP characters (whitespace, special chars, etc.)
+  return ip.trim().replace(/[^0-9a-fA-F.:]/g, '')
+}
+
+/**
  * Get client IP address dari request
+ * Validates and sanitizes IP to prevent injection attacks
  */
 export function getClientIP(request: Request): string {
   // Try various headers untuk get IP
   const forwarded = request.headers.get('x-forwarded-for')
   if (forwarded) {
-    return forwarded.split(',')[0]?.trim() || 'unknown'
+    const firstIP = forwarded.split(',')[0]?.trim()
+    if (firstIP) {
+      const sanitized = sanitizeIP(firstIP)
+      if (isValidIP(sanitized)) {
+        return sanitized
+      }
+    }
   }
 
   const realIP = request.headers.get('x-real-ip')
   if (realIP) {
-    return realIP
+    const sanitized = sanitizeIP(realIP)
+    if (isValidIP(sanitized)) {
+      return sanitized
+    }
   }
 
-  // Fallback untuk development
+  // Fallback untuk development or invalid IPs
   return 'unknown'
 }
