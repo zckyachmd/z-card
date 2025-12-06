@@ -1,6 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { POST, GET } from '@/app/api/contact/route'
-import { checkRateLimit } from '@/lib/rate-limit'
 import { validateRobot } from '@/lib/robot-validation'
 import { validateContactForm } from '@/lib/validation'
 import { sendContactEmail } from '@/lib/email'
@@ -279,7 +278,6 @@ describe('POST /api/contact', () => {
   })
 
   it('should return 500 on unexpected error', async () => {
-    const { checkRateLimit } = await import('@/lib/rate-limit')
     const { getClientIP } = await import('@/lib/rate-limit')
     vi.mocked(getClientIP).mockImplementation(() => {
       throw new Error('Unexpected error')

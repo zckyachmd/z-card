@@ -110,6 +110,7 @@ describe('buildVCard', () => {
     fullName: 'John Doe',
     jobTitle: 'Developer',
     location: 'New York, NY',
+    tagline: 'Building awesome things',
   }
 
   it('should build valid vCard format', () => {
