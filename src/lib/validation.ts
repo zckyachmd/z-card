@@ -19,9 +19,9 @@ export const contactFormSchema = z.object({
   email: z
     .string()
     .min(1, 'Email is required')
+    .trim()
     .email('Invalid email address')
     .max(255, 'Email must be less than 255 characters')
-    .trim()
     .toLowerCase(),
   message: z
     .string()

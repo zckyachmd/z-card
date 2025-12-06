@@ -1,0 +1,5 @@
+Contact: mailto:hi@zacky.id
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en, id
+Canonical: https://zacky.id/.well-known/security.txt
+

@@ -1,0 +1,19 @@
+/* TEAM */
+Zacky Achmad: Full-Stack Web Developer, Founder
+Site: https://zacky.id
+Email: hi@zacky.id
+Location: Cimahi, Indonesia
+
+/* THANKS */
+shadcn/ui: https://ui.shadcn.com
+Next.js: https://nextjs.org
+Vercel: https://vercel.com
+Radix UI: https://www.radix-ui.com
+Tailwind CSS: https://tailwindcss.com
+
+/* SITE */
+Last update: 2025/01/27
+Standards: HTML5, CSS3, JavaScript ES6+, TypeScript
+Components: React 19, Next.js 15
+Software: VS Code, Git, pnpm
+

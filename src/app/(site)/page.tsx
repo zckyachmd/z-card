@@ -18,8 +18,28 @@ export default function HomePage() {
             name: 'Zacky Achmad',
             url: 'https://zacky.id',
             jobTitle: 'Full-Stack Web Developer',
-            address: { '@type': 'PostalAddress', addressLocality: 'Cimahi', addressCountry: 'ID' },
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Cimahi',
+              addressCountry: 'ID',
+            },
             email: 'hi@zacky.id',
+            image: 'https://zacky.id/opengraph-image',
+            sameAs: [
+              'https://github.com/zckyachmd',
+              'https://linkedin.com/in/zckyachmd',
+              'https://instagram.com/zckyachmd',
+            ],
+            worksFor: {
+              '@type': 'Organization',
+              name: 'PT Astra Graphia Information Technology (AGIT)',
+              jobTitle: 'Back-End Developer',
+            },
+            alumniOf: {
+              '@type': 'EducationalOrganization',
+              name: 'Universitas Telkom',
+              description: 'B.A.Sc — Teknologi Rekayasa Multimedia',
+            },
           }),
         }}
       />

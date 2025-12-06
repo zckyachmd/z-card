@@ -14,6 +14,36 @@ export const metadata: Metadata = {
     'Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Cimahi, Indonesia. Clean, secure, and efficient systems.',
   metadataBase: new URL('https://zacky.id'),
   alternates: { canonical: '/' },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  keywords: [
+    'Full-Stack Developer',
+    'Web Developer',
+    'Portfolio',
+    'Indonesia',
+    'Cimahi',
+    'Backend Developer',
+    'Frontend Developer',
+    'Software Engineer',
+  ],
+  authors: [{ name: 'Zacky Achmad', url: 'https://zacky.id' }],
+  creator: 'Zacky Achmad',
+  publisher: 'Zacky Achmad',
+  category: 'Portfolio',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
     title: 'Zacky Achmad — Full-Stack Web Developer',
     description: 'Clean, secure, and efficient systems. Based in Cimahi, Indonesia.',
@@ -21,11 +51,20 @@ export const metadata: Metadata = {
     siteName: 'zacky.id',
     type: 'website',
     locale: 'en_US',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Zacky Achmad - Full-Stack Web Developer Portfolio',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Zacky Achmad — Full-Stack Web Developer',
     description: 'Clean, secure, and efficient systems.',
+    images: ['/opengraph-image'],
   },
   icons: {
     icon: [
