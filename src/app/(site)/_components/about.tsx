@@ -200,7 +200,7 @@ export default function AboutSection() {
             {TECH_STACK.map(({ label, icon: Icon, items }) => (
               <div key={label} className='rounded-xl border p-3'>
                 <div className='mb-2 flex items-center gap-2 text-sm font-medium'>
-                  <Icon className='size-4' /> {label}
+                  <Icon className='size-4' aria-hidden='true' /> {label}
                 </div>
                 <div className='flex flex-wrap gap-2'>
                   {items.map(it => (
@@ -281,7 +281,7 @@ function Timeline({
             <span className='bg-background absolute -left-[7px] mt-2 inline-flex size-3 rounded-full border' />
             <div className='flex flex-col gap-0.5'>
               <div className='flex items-center gap-2 text-sm font-medium'>
-                <Icon className='size-4' /> {title}
+                <Icon className='size-4' aria-hidden='true' /> {title}
               </div>
               <div className='text-muted-foreground text-[11px]'>{meta}</div>
               <p className='text-muted-foreground text-sm'>{desc}</p>

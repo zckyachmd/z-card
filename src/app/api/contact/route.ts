@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server'
 import { sendContactEmail } from '@/lib/email'
 import { checkRateLimit, getClientIP } from '@/lib/rate-limit'
 import { validateRobot } from '@/lib/robot-validation'
+import { verifyTurnstileToken } from '@/lib/turnstile'
 import { validateContactForm } from '@/lib/validation'
 import type { ContactFormResponse } from '@/types'
 
@@ -72,7 +73,37 @@ export async function POST(request: Request) {
       )
     }
 
-    // Robot validation
+    // Cloudflare Turnstile verification
+    if (process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY) {
+      const turnstileToken = validation.data.turnstileToken
+      if (!turnstileToken) {
+        return NextResponse.json<ContactFormResponse>(
+          {
+            success: false,
+            error: 'CAPTCHA verification required',
+          },
+          {
+            status: 400,
+          },
+        )
+      }
+
+      const turnstileResult = await verifyTurnstileToken(turnstileToken, clientIP)
+      if (!turnstileResult.success) {
+        console.warn('Turnstile verification failed:', turnstileResult.error, 'IP:', clientIP)
+        return NextResponse.json<ContactFormResponse>(
+          {
+            success: false,
+            error: 'CAPTCHA verification failed. Please try again.',
+          },
+          {
+            status: 400,
+          },
+        )
+      }
+    }
+
+    // Robot validation (fallback if Turnstile is not configured)
     const robotCheck = validateRobot({
       honeypot: validation.data.honeypot,
       submissionTime: validation.data.submissionTime,
@@ -92,8 +123,13 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send email (only name, email, message - exclude honeypot and submissionTime)
-    const { honeypot: _honeypot, submissionTime: _submissionTime, ...emailData } = validation.data
+    // Send email (only name, email, message - exclude honeypot, submissionTime, and turnstileToken)
+    const {
+      honeypot: _honeypot,
+      submissionTime: _submissionTime,
+      turnstileToken: _turnstileToken,
+      ...emailData
+    } = validation.data
     const emailResult = await sendContactEmail(emailData)
 
     if (!emailResult.success) {

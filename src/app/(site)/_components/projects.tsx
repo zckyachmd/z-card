@@ -128,7 +128,7 @@ export default function ProjectsSection() {
               aria-label='Previous projects'
               className='text-muted-foreground hover:bg-accent inline-flex items-center justify-center rounded-md border p-2'
             >
-              <ChevronLeft className='size-4' />
+              <ChevronLeft className='size-4' aria-hidden='true' />
             </button>
             <button
               type='button'
@@ -136,7 +136,7 @@ export default function ProjectsSection() {
               aria-label='Next projects'
               className='text-muted-foreground hover:bg-accent inline-flex items-center justify-center rounded-md border p-2'
             >
-              <ChevronRight className='size-4' />
+              <ChevronRight className='size-4' aria-hidden='true' />
             </button>
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function ProjectsSection() {
             rel='noopener noreferrer'
             className='text-muted-foreground hover:text-foreground inline-flex items-center gap-2 text-sm'
           >
-            <Github className='size-4' /> View more on GitHub
+            <Github className='size-4' aria-hidden='true' /> View more on GitHub
           </a>
         </div>
       </div>
@@ -202,7 +202,7 @@ function ProjectCard({ title, blurb, tech, live, repo }: Project) {
             className='hover:bg-accent inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-xs'
             aria-label={`Open live demo: ${title}`}
           >
-            <ExternalLink className='size-3.5' /> Live
+            <ExternalLink className='size-3.5' aria-hidden='true' /> Live
           </Link>
         )}
         {repo && (
@@ -213,7 +213,7 @@ function ProjectCard({ title, blurb, tech, live, repo }: Project) {
             className='hover:bg-accent inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-xs'
             aria-label={`Open repository: ${title}`}
           >
-            <Github className='size-3.5' /> Repo
+            <Github className='size-3.5' aria-hidden='true' /> Repo
           </a>
         )}
       </CardFooter>

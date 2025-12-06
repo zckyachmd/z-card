@@ -33,6 +33,8 @@ export const contactFormSchema = z.object({
   honeypot: z.string().optional().default(''),
   // Submission time in milliseconds (from form load to submit)
   submissionTime: z.number().optional(),
+  // Cloudflare Turnstile token
+  turnstileToken: z.string().optional(),
 })
 
 export type ContactFormInput = z.infer<typeof contactFormSchema>

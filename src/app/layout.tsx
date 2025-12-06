@@ -1,12 +1,25 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 
 import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
+import SkipLink from '@/components/skip-link'
 import { ThemeProvider } from '@/components/theme-provider'
 
 import './globals.css'
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+})
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
 
 export const metadata: Metadata = {
   title: 'Zacky Achmad — Full-Stack Web Developer',
@@ -14,11 +27,6 @@ export const metadata: Metadata = {
     'Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Cimahi, Indonesia. Clean, secure, and efficient systems.',
   metadataBase: new URL('https://zacky.id'),
   alternates: { canonical: '/' },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
   keywords: [
     'Full-Stack Developer',
     'Web Developer',
@@ -86,7 +94,7 @@ export const metadata: Metadata = {
         sizes: '512x512',
         type: 'image/png',
       },
-      { rel: 'manifest', url: '/favicon/site.webmanifest' },
+      { rel: 'manifest', url: '/manifest.json' },
     ],
   },
 }
@@ -95,6 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
+        <SkipLink />
         <ThemeProvider
           attribute='class'
           defaultTheme='system'
@@ -102,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <Navbar />
-          {children}
+          <main id='main-content'>{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

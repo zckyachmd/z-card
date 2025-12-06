@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Send } from 'lucide-react'
 
+import CloudflareTurnstile from '@/components/cloudflare-turnstile'
 import Section from '@/components/section'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,10 +14,12 @@ export default function Contact() {
   const [email, setEmail] = React.useState('')
   const [message, setMessage] = React.useState('')
   const [honeypot, setHoneypot] = React.useState('')
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [formLoadTime] = React.useState(() => Date.now())
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ''
 
   // Client-side validation
   function validateForm(): string | null {
@@ -57,6 +60,12 @@ export default function Contact() {
       return
     }
 
+    // Check Turnstile token if site key is configured
+    if (turnstileSiteKey && !turnstileToken) {
+      setError('Please complete the CAPTCHA verification')
+      return
+    }
+
     setSubmitting(true)
 
     try {
@@ -75,6 +84,7 @@ export default function Contact() {
           message: message.trim(),
           honeypot: honeypot.trim(),
           submissionTime,
+          turnstileToken: turnstileToken || undefined,
         }),
       })
 
@@ -92,6 +102,7 @@ export default function Contact() {
       setEmail('')
       setMessage('')
       setHoneypot('')
+      setTurnstileToken(null) // Reset Turnstile token
 
       // Reset success message after 5 seconds
       setTimeout(() => {
@@ -223,6 +234,29 @@ export default function Contact() {
                     className='bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-primary/50 min-h-[140px] rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
                   />
                 </div>
+
+                {/* Cloudflare Turnstile CAPTCHA */}
+                {turnstileSiteKey && (
+                  <div className='flex justify-start'>
+                    <CloudflareTurnstile
+                      siteKey={turnstileSiteKey}
+                      onVerify={token => {
+                        setTurnstileToken(token)
+                        setError(null) // Clear any previous CAPTCHA errors
+                      }}
+                      onError={() => {
+                        setTurnstileToken(null)
+                        setError('CAPTCHA verification failed. Please try again.')
+                      }}
+                      onExpire={() => {
+                        setTurnstileToken(null)
+                        setError('CAPTCHA expired. Please verify again.')
+                      }}
+                      theme='auto'
+                      size='normal'
+                    />
+                  </div>
+                )}
               </CardContent>
 
               <CardFooter className='pt-0'>
@@ -232,7 +266,7 @@ export default function Contact() {
                   aria-label='Send message'
                   className='w-full sm:w-auto'
                 >
-                  <Send className='mr-2 size-4' />
+                  <Send className='mr-2 size-4' aria-hidden='true' />
                   {submitting ? 'Sending…' : 'Send'}
                 </Button>
                 <span className='sr-only' aria-live='polite'>

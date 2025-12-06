@@ -17,7 +17,7 @@ export default function Hero() {
       <div className=''>
         <div className='flex flex-col items-start gap-6'>
           <span className='inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs md:text-sm'>
-            <MapPin className='size-3.5' />
+            <MapPin className='size-3.5' aria-hidden='true' />
             Based in Cimahi, Indonesia
           </span>
 
@@ -35,14 +35,14 @@ export default function Hero() {
           </p>
 
           <div className='flex flex-wrap items-center gap-3 pt-2'>
-            <Button onClick={() => setCardOpen(true)}>
-              <Mail className='mr-2 size-4' />
+            <Button onClick={() => setCardOpen(true)} aria-label='Open contact card'>
+              <Mail className='mr-2 size-4' aria-hidden='true' />
               Contact Me
             </Button>
 
             <Button asChild variant='outline'>
               <Link href='#projects' aria-label='See featured projects'>
-                View Projects <ArrowRight className='ml-2 size-4' />
+                View Projects <ArrowRight className='ml-2 size-4' aria-hidden='true' />
               </Link>
             </Button>
           </div>

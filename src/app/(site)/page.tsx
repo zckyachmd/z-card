@@ -1,7 +1,45 @@
-import About from '@/app/(site)/_components/about'
-import Contact from '@/app/(site)/_components/contact'
-import Hero from '@/app/(site)/_components/hero'
-import Projects from '@/app/(site)/_components/projects'
+import { Suspense } from 'react'
+import nextDynamic from 'next/dynamic'
+
+import Section from '@/components/section'
+import AboutSkeleton from '@/components/skeletons/about-skeleton'
+import ContactSkeleton from '@/components/skeletons/contact-skeleton'
+import HeroSkeleton from '@/components/skeletons/hero-skeleton'
+import ProjectsSkeleton from '@/components/skeletons/projects-skeleton'
+
+// Lazy load all sections with skeleton loading states
+// All sections are lazy loaded to show skeleton during initial load
+const Hero = nextDynamic(() => import('@/app/(site)/_components/hero'), {
+  loading: () => (
+    <Section id='home' full>
+      <HeroSkeleton />
+    </Section>
+  ),
+})
+
+const About = nextDynamic(() => import('@/app/(site)/_components/about'), {
+  loading: () => (
+    <Section id='about'>
+      <AboutSkeleton />
+    </Section>
+  ),
+})
+
+const Projects = nextDynamic(() => import('@/app/(site)/_components/projects'), {
+  loading: () => (
+    <Section id='projects'>
+      <ProjectsSkeleton />
+    </Section>
+  ),
+})
+
+const Contact = nextDynamic(() => import('@/app/(site)/_components/contact'), {
+  loading: () => (
+    <Section id='contact'>
+      <ContactSkeleton />
+    </Section>
+  ),
+})
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -43,12 +81,44 @@ export default function HomePage() {
           }),
         }}
       />
-      <main className='lg:snap-y lg:snap-mandatory'>
-        <Hero />
-        <About />
-        <Projects />
-        <Contact />
-      </main>
+      <div className='lg:snap-y lg:snap-mandatory'>
+        <Suspense
+          fallback={
+            <Section id='home' full>
+              <HeroSkeleton />
+            </Section>
+          }
+        >
+          <Hero />
+        </Suspense>
+        <Suspense
+          fallback={
+            <Section id='about'>
+              <AboutSkeleton />
+            </Section>
+          }
+        >
+          <About />
+        </Suspense>
+        <Suspense
+          fallback={
+            <Section id='projects'>
+              <ProjectsSkeleton />
+            </Section>
+          }
+        >
+          <Projects />
+        </Suspense>
+        <Suspense
+          fallback={
+            <Section id='contact'>
+              <ContactSkeleton />
+            </Section>
+          }
+        >
+          <Contact />
+        </Suspense>
+      </div>
     </>
   )
 }
