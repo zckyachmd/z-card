@@ -231,7 +231,7 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 
 ## 📝 License
 
-[Add your license here]
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -242,6 +242,6 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 
 ---
 
-**Last Updated:** 2025-01-27  
-**Status:** Active Development  
+**Last Updated:** 2025-01-27
+**Status:** Active Development
 **Version:** 0.1.0
