@@ -42,7 +42,7 @@ const Contact = nextDynamic(() => import('@/app/(site)/_components/contact'), {
 })
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
+export const runtime = 'bun'
 
 export default function HomePage() {
   return (
