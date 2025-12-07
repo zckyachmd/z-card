@@ -42,7 +42,7 @@ const Contact = nextDynamic(() => import('@/app/(site)/_components/contact'), {
 })
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'bun'
+export const runtime = 'nodejs' // Next.js only supports 'nodejs' or 'edge', but we run it with Bun
 
 export default function HomePage() {
   return (

@@ -28,6 +28,8 @@ COPY package.json bun.lock* pnpm-lock.yaml* ./
 # Copy the rest of your source code
 COPY . .
 # Build Next.js with standalone output for Docker
+# Note: Bun runs Next.js which uses 'nodejs' runtime internally
+# Source map warnings are non-fatal and can be ignored
 ENV DOCKER_BUILD=true
 RUN bun run build
 
