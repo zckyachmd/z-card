@@ -91,5 +91,5 @@ playwright.config.ts
 vitest.config.ts
 eslint.config.mjs
 prettier.config.cjs
-tsconfig.json
+# Note: tsconfig.json is needed for Next.js path alias resolution during build
 
