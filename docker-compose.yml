@@ -12,9 +12,54 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+
+    # Security: Resource limits to prevent DoS
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+    # Security: Read-only root filesystem with tmpfs for writable areas
+    # Note: Next.js standalone mode should work with read-only filesystem
+    # If you encounter write errors, you may need to add more tmpfs mounts
+    # or disable read_only mode
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/tmp
+      # Uncomment if Next.js needs cache directory
+      # - /app/.next/cache:rw,noexec,nosuid,size=100m
+
+    # Security: Disable privilege escalation
+    security_opt:
+      - no-new-privileges:true
+
+    # Security: Drop all capabilities and only add what's needed
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE  # Required to bind to port 3000
+
+    # Security: Use specific user (non-root)
+    user: "1001:1001"
+
+    # Health check using curl (now available in image)
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -T 3 -O - http://localhost:3000/ >/dev/null 2>&1 || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
       start_period: 10s
+
+    # Security: Network isolation
+    networks:
+      - z-card-network
+
+networks:
+  z-card-network:
+    driver: bridge
+    internal: false  # Set to true if you don't need external internet access
