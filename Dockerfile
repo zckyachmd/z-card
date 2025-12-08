@@ -47,13 +47,17 @@ RUN apk add --no-cache curl
 RUN addgroup --system --gid 1001 bunjs && \
     adduser --system --uid 1001 nextjs
 
-# Run as non-root for security
-USER nextjs
-
 # Copy standalone server output & static assets with proper ownership
 COPY --chown=nextjs:bunjs --from=builder /app/.next/standalone ./
 COPY --chown=nextjs:bunjs --from=builder /app/.next/static ./.next/static
 COPY --chown=nextjs:bunjs --from=builder /app/public ./public
+
+# Copy entrypoint script and make it executable
+COPY --chown=nextjs:bunjs docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
+# Run as non-root for security
+USER nextjs
 
 # Network
 EXPOSE 3000
@@ -64,6 +68,6 @@ ENV HOSTNAME=0.0.0.0
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:3000/ || exit 1
 
-# Start the server using Bun runtime
-# Bun can run Node.js compatible files directly
-CMD ["bun", "server.js"]
+# Start the server using entrypoint script
+# This ensures environment variables from Portainer are properly loaded
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

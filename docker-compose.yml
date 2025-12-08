@@ -4,6 +4,21 @@ services:
     build:
       context: .
       target: runner
+    # Environment variables
+    # IMPORTANT: Environment variables set in Portainer UI will be available to the container
+    # Portainer passes env vars to Docker, which are then available in process.env
+    #
+    # Required env vars (set these in Portainer):
+    #   - SMTP_HOST, SMTP_PORT, SMTP_FROM_EMAIL, SMTP_TO_EMAIL
+    #   - SMTP_USER, SMTP_PASS (if SMTP requires authentication)
+    #   - CLOUDFLARE_TURNSTILE_SECRET_KEY
+    #   - NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY (for client-side)
+    #
+    # Optional env vars:
+    #   - SMTP_SECURE (true/false, default: false)
+    #   - RATE_LIMIT_MAX_REQUESTS (default: 5)
+    #   - RATE_LIMIT_WINDOW_MS (default: 60000)
+    #   - DEBUG_ENV (set to "true" to see env vars in logs)
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
