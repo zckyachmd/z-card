@@ -41,3 +41,28 @@ export function isTurnstileFullyConfigured(): boolean {
 export function getTurnstileSiteKey(): string {
   return process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ''
 }
+
+/**
+ * Check if SMTP is configured
+ * Note: This is a server-side check and should not be used in client components
+ */
+function isSMTPConfigured(): boolean {
+  return !!(
+    process.env.SMTP_HOST &&
+    process.env.SMTP_PORT &&
+    process.env.SMTP_FROM_EMAIL &&
+    process.env.SMTP_TO_EMAIL
+  )
+}
+
+/**
+ * Check if email services are available (SMTP configured or Turnstile configured)
+ * Returns true if either SMTP or Turnstile is configured (meaning form can be submitted)
+ * Returns false if neither is configured (meaning should fallback to mailto)
+ * Note: This function accesses server environment variables and should not be used in client components
+ */
+export function areEmailServicesAvailable(): boolean {
+  const smtpConfigured = isSMTPConfigured()
+  const turnstileConfigured = isTurnstileEnabledServer()
+  return smtpConfigured || turnstileConfigured
+}

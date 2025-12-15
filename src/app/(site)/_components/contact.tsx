@@ -11,7 +11,11 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { getTurnstileSiteKey, isTurnstileEnabledClient } from '@/lib/turnstile-config'
 import type { ContactFormResponse } from '@/types'
 
-export default function Contact() {
+interface ContactProps {
+  emailServicesAvailable: boolean
+}
+
+export default function Contact({ emailServicesAvailable }: ContactProps) {
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [message, setMessage] = React.useState('')
@@ -52,6 +56,15 @@ export default function Contact() {
     return null
   }
 
+  // Generate mailto URL for fallback when email services are not available
+  function generateMailtoUrl(): string {
+    const subject = encodeURIComponent(`Contact Form Inquiry - ${name.trim()}`)
+    const body = encodeURIComponent(
+      `Subject: Contact Form Submission\n\nDear Recipient,\n\nThis is an automated message from the contact form.\n\nSender Details:\n- Name: ${name.trim()}\n- Email: ${email.trim()}\n\nMessage:\n${message.trim()}\n\nPlease respond to the sender directly at: ${email.trim()}\n\nThis message was sent from zacky.id contact form.\n\nBest regards,\nAutomated Contact Form System`,
+    )
+    return `mailto:hi@zacky.id?subject=${subject}&body=${body}`
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
@@ -68,6 +81,13 @@ export default function Contact() {
     // If only one key is configured, there will be a validation mismatch
     if (turnstileEnabled && !turnstileToken) {
       toast.error('Please complete the CAPTCHA verification')
+      return
+    }
+
+    // If email services are not available, use mailto fallback
+    if (!emailServicesAvailable) {
+      const mailtoUrl = generateMailtoUrl()
+      window.location.href = mailtoUrl
       return
     }
 
@@ -139,7 +159,14 @@ export default function Contact() {
           <Card className='overflow-hidden'>
             <form onSubmit={onSubmit} className='grid gap-5 sm:gap-6'>
               <CardHeader className='pb-1 sm:pb-2'>
-                <CardTitle className='text-base sm:text-lg'>Send a message</CardTitle>
+                <CardTitle className='text-base sm:text-lg'>
+                  Send a message
+                  {!emailServicesAvailable && (
+                    <span className='text-muted-foreground mt-1 block text-xs font-normal'>
+                      Email services not configured - messages will open in your email client
+                    </span>
+                  )}
+                </CardTitle>
               </CardHeader>
 
               <CardContent className='grid gap-4 sm:gap-5'>
@@ -213,8 +240,8 @@ export default function Contact() {
                   />
                 </div>
 
-                {/* Cloudflare Turnstile CAPTCHA */}
-                {turnstileSiteKey && (
+                {/* Cloudflare Turnstile CAPTCHA - only show when email services are available */}
+                {turnstileSiteKey && emailServicesAvailable && (
                   <div className='flex justify-start'>
                     <CloudflareTurnstile
                       siteKey={turnstileSiteKey}

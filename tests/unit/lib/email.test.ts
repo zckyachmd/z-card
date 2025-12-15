@@ -85,7 +85,7 @@ describe('sendContactEmail', () => {
     expect(callArgs?.subject).toContain('&lt;script&gt;')
   })
 
-  it('should convert newlines to <br> in HTML email', async () => {
+  it('should preserve newlines in HTML email message', async () => {
     mockSendMail.mockResolvedValue({
       messageId: 'test-message-id-123',
     })
@@ -97,7 +97,7 @@ describe('sendContactEmail', () => {
     })
 
     const callArgs = mockSendMail.mock.calls[0]?.[0]
-    expect(callArgs?.html).toContain('Line 1<br>Line 2<br>Line 3')
+    expect(callArgs?.html).toContain('Line 1\nLine 2\nLine 3')
   })
 
   it('should include plain text version', async () => {

@@ -144,48 +144,48 @@ ${data.message}
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Contact Form Submission</title>
+  <title>Contact Form Message</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5; line-height: 1.6; color: #333;">
-  <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f5f5f5; padding: 20px;">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa; line-height: 1.6; color: #333;">
+  <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f8f9fa; padding: 20px;">
     <tr>
       <td align="center" style="padding: 20px 0;">
-        <table role="presentation" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-collapse: collapse; overflow: hidden;">
+        <table role="presentation" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e1e5e9; border-radius: 6px; border-collapse: collapse; overflow: hidden;">
           <!-- Header -->
           <tr>
-            <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px 40px; text-align: center;">
-              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">
-                New Contact Form Submission
+            <td style="background-color: #f8f9fa; border-bottom: 1px solid #e1e5e9; padding: 24px 30px; text-align: left;">
+              <h1 style="margin: 0; color: #1a1a1a; font-size: 20px; font-weight: 600;">
+                Contact Form Message
               </h1>
-              <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">
-                ${escapeHtml(formattedDate)}
+              <p style="margin: 4px 0 0 0; color: #6c757d; font-size: 14px;">
+                Received on ${escapeHtml(formattedDate)}
               </p>
             </td>
           </tr>
 
           <!-- Content -->
           <tr>
-            <td style="padding: 40px;">
+            <td style="padding: 30px;">
               <!-- Contact Information -->
-              <div style="margin-bottom: 32px;">
-                <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #1a1a1a; border-bottom: 2px solid #e5e5e5; padding-bottom: 12px;">
-                  Contact Information
+              <div style="margin-bottom: 24px;">
+                <h2 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #1a1a1a; border-bottom: 1px solid #dee2e6; padding-bottom: 8px;">
+                  Sender Details
                 </h2>
                 <table role="presentation" style="width: 100%; border-collapse: collapse;">
                   <tr>
-                    <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; width: 140px; font-weight: 600; color: #666; vertical-align: top;">
+                    <td style="padding: 8px 0; width: 120px; font-weight: 500; color: #495057; vertical-align: top;">
                       Name:
                     </td>
-                    <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #1a1a1a;">
+                    <td style="padding: 8px 0; color: #212529;">
                       ${escapeHtml(safeName)}
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; width: 140px; font-weight: 600; color: #666; vertical-align: top;">
+                    <td style="padding: 8px 0; width: 120px; font-weight: 500; color: #495057; vertical-align: top;">
                       Email:
                     </td>
-                    <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #1a1a1a;">
-                      <a href="mailto:${escapeHtml(safeEmail)}" style="color: #667eea; text-decoration: none;">
+                    <td style="padding: 8px 0; color: #212529;">
+                      <a href="mailto:${escapeHtml(safeEmail)}" style="color: #0066cc; text-decoration: none;">
                         ${escapeHtml(safeEmail)}
                       </a>
                     </td>
@@ -194,26 +194,26 @@ ${data.message}
               </div>
 
               <!-- Message -->
-              <div style="margin-bottom: 32px;">
-                <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #1a1a1a; border-bottom: 2px solid #e5e5e5; padding-bottom: 12px;">
-                  Message
+              <div style="margin-bottom: 24px;">
+                <h2 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #1a1a1a; border-bottom: 1px solid #dee2e6; padding-bottom: 8px;">
+                  Message Content
                 </h2>
-                <div style="background-color: #f9f9f9; border-left: 4px solid #667eea; padding: 20px; border-radius: 4px; white-space: pre-wrap; color: #1a1a1a; line-height: 1.8;">
+                <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 16px; border-radius: 4px; white-space: pre-wrap; color: #212529; line-height: 1.5; font-family: 'Courier New', monospace; font-size: 14px;">
 ${escapeHtml(data.message)}
                 </div>
               </div>
 
               <!-- Metadata -->
-              <div style="margin-top: 32px; padding-top: 24px; border-top: 2px solid #e5e5e5;">
-                <h3 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">
-                  Submission Details
+              <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #dee2e6;">
+                <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #495057;">
+                  Technical Details
                 </h3>
-                <table role="presentation" style="width: 100%; border-collapse: collapse; font-size: 13px; color: #666;">
+                <table role="presentation" style="width: 100%; border-collapse: collapse; font-size: 13px; color: #6c757d;">
                   <tr>
-                    <td style="padding: 8px 0; width: 140px; font-weight: 500;">
-                      Submitted:
+                    <td style="padding: 4px 0; width: 120px; font-weight: 500;">
+                      Timestamp:
                     </td>
-                    <td style="padding: 8px 0;">
+                    <td style="padding: 4px 0;">
                       ${escapeHtml(formattedDate)}
                     </td>
                   </tr>
@@ -221,10 +221,10 @@ ${escapeHtml(data.message)}
                     submissionTimeMs
                       ? `
                   <tr>
-                    <td style="padding: 8px 0; width: 140px; font-weight: 500;">
-                      Form Fill Time:
+                    <td style="padding: 4px 0; width: 120px; font-weight: 500;">
+                      Form time:
                     </td>
-                    <td style="padding: 8px 0;">
+                    <td style="padding: 4px 0;">
                       ${submissionTimeFormatted}
                     </td>
                   </tr>
@@ -235,10 +235,10 @@ ${escapeHtml(data.message)}
                     metadata?.ipAddress
                       ? `
                   <tr>
-                    <td style="padding: 8px 0; width: 140px; font-weight: 500;">
-                      IP Address:
+                    <td style="padding: 4px 0; width: 120px; font-weight: 500;">
+                      IP:
                     </td>
-                    <td style="padding: 8px 0; font-family: monospace; font-size: 12px;">
+                    <td style="padding: 4px 0; font-family: 'Courier New', monospace; font-size: 12px;">
                       ${escapeHtml(metadata.ipAddress)}
                     </td>
                   </tr>
@@ -249,9 +249,9 @@ ${escapeHtml(data.message)}
               </div>
 
               <!-- Action Button -->
-              <div style="margin-top: 32px; text-align: center;">
-                <a href="mailto:${escapeHtml(safeEmail)}?subject=Re: Contact Form Submission&body=Hi ${escapeHtml(safeName.split(' ')[0])},%0D%0A%0D%0AThank you for reaching out!%0D%0A%0D%0A"
-                   style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+              <div style="margin-top: 24px; text-align: center; padding-top: 16px; border-top: 1px solid #dee2e6;">
+                <a href="mailto:${escapeHtml(safeEmail)}?subject=Re: Contact Form Message&body=Hi ${escapeHtml(safeName.split(' ')[0])},%0D%0A%0D%0AThank you for your message.%0D%0A%0D%0A"
+                   style="display: inline-block; background-color: #007bff; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-weight: 500; font-size: 14px;">
                     Reply to ${escapeHtml(safeName.split(' ')[0])}
                 </a>
               </div>
@@ -260,10 +260,10 @@ ${escapeHtml(data.message)}
 
           <!-- Footer -->
           <tr>
-            <td style="background-color: #f9f9f9; padding: 24px 40px; text-align: center; border-top: 1px solid #e5e5e5;">
-              <p style="margin: 0; color: #999; font-size: 12px; line-height: 1.6;">
-                This email was sent from the contact form on <a href="https://zacky.id" style="color: #667eea; text-decoration: none;">zacky.id</a><br>
-                <span style="color: #bbb;">Please do not reply directly to this email. Use the reply button above.</span>
+            <td style="background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #dee2e6;">
+              <p style="margin: 0; color: #6c757d; font-size: 12px; line-height: 1.4;">
+                This message was sent via the contact form on <a href="https://zacky.id" style="color: #0066cc; text-decoration: none;">zacky.id</a><br>
+                Please use the reply button above to respond.
               </p>
             </td>
           </tr>
@@ -276,40 +276,32 @@ ${escapeHtml(data.message)}
     `.trim()
 
     const textTemplate = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-NEW CONTACT FORM SUBMISSION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Contact Form Message
+Received: ${formattedDate}
 
-📅 Submitted: ${formattedDate}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CONTACT INFORMATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+---
+Sender Details:
 Name:  ${safeName}
 Email: ${safeEmail}
-${metadata?.ipAddress ? `IP:    ${metadata.ipAddress}` : ''}
-${submissionTimeMs ? `Time:  ${submissionTimeFormatted} (form fill time)` : ''}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MESSAGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+Message:
 ${data.message}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
+Technical Details:
+${metadata?.ipAddress ? `IP Address: ${metadata.ipAddress}` : ''}
+${submissionTimeMs ? `Form Fill Time: ${submissionTimeFormatted}` : ''}
 
-This email was sent from the contact form on zacky.id
+---
+This message was sent via the contact form on zacky.id
 Please reply to: ${safeEmail}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     `.trim()
 
     const mailOptions = {
       from: `"${escapeHtml(data.name)}" <${process.env.SMTP_FROM_EMAIL}>`,
       to: process.env.SMTP_TO_EMAIL,
       replyTo: data.email,
-      subject: `Contact Form: ${escapeHtml(data.name)}`,
+      subject: `New message from ${escapeHtml(data.name)}`,
       html: htmlTemplate,
       text: textTemplate,
     }

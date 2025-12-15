@@ -33,7 +33,7 @@ const Projects = nextDynamic(() => import('@/app/(site)/_components/projects'), 
   ),
 })
 
-const Contact = nextDynamic(() => import('@/app/(site)/_components/contact'), {
+const Contact = nextDynamic(() => import('@/app/(site)/_components/contact-wrapper'), {
   loading: () => (
     <Section id='contact'>
       <ContactSkeleton />
