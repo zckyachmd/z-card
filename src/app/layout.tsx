@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 
 import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
@@ -15,6 +16,19 @@ const inter = Inter({
   preload: true,
   fallback: ['system-ui', 'arial'],
 })
+
+const umamiWebsiteId = process.env.UMAMI_WEBSITE_ID ?? process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
+const umamiBaseUrl = process.env.UMAMI_URL ?? process.env.NEXT_PUBLIC_UMAMI_URL
+const umamiScriptPath =
+  process.env.UMAMI_SCRIPT_PATH ?? process.env.NEXT_PUBLIC_UMAMI_SCRIPT_PATH ?? '/script.js'
+const umamiDomains = process.env.UMAMI_DOMAINS ?? process.env.NEXT_PUBLIC_UMAMI_DOMAINS
+const umamiAutoTrackDisabled =
+  (process.env.UMAMI_AUTO_TRACK ?? process.env.NEXT_PUBLIC_UMAMI_AUTO_TRACK) === 'false'
+const umamiScriptSrc = umamiBaseUrl
+  ? `${umamiBaseUrl.replace(/\/$/, '')}${
+      umamiScriptPath.startsWith('/') ? umamiScriptPath : `/${umamiScriptPath}`
+    }`
+  : null
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -116,6 +130,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
         </ThemeProvider>
         <Toaster />
+        {umamiWebsiteId && umamiScriptSrc ? (
+          <Script
+            src={umamiScriptSrc}
+            data-website-id={umamiWebsiteId}
+            data-domains={umamiDomains}
+            data-auto-track={umamiAutoTrackDisabled ? 'false' : undefined}
+            async
+          />
+        ) : null}
       </body>
     </html>
   )

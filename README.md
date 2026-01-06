@@ -190,6 +190,30 @@ The contact form requires SMTP configuration to send emails. The project uses **
 
 For more details, see [`.env.example`](./.env.example) for all available configuration options.
 
+## 📊 Umami Analytics (Self-hosted)
+
+This project supports optional Umami tracking via environment variables.
+
+### Setup Instructions
+
+1. **Copy environment template:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Configure Umami settings in `.env`:**
+   ```env
+   UMAMI_URL=https://umami.example.com
+   UMAMI_WEBSITE_ID=your_website_id_here
+   # Optional
+   UMAMI_SCRIPT_PATH=/script.js
+   UMAMI_DOMAINS=example.com,www.example.com
+   UMAMI_AUTO_TRACK=true
+   ```
+
+If `UMAMI_URL` or `UMAMI_WEBSITE_ID` is missing, the script won't load.
+You can also use `NEXT_PUBLIC_UMAMI_*` for build-time injection when needed.
+
 ## 🚢 Deployment
 
 ### Vercel (Recommended)

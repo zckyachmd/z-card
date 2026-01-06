@@ -18,7 +18,14 @@ services:
     #   - SMTP_SECURE (true/false, default: false)
     #   - RATE_LIMIT_MAX_REQUESTS (default: 5)
     #   - RATE_LIMIT_WINDOW_MS (default: 60000)
+    #   - UMAMI_URL (e.g. https://umami.example.com)
+    #   - UMAMI_WEBSITE_ID
+    #   - UMAMI_SCRIPT_PATH (default: /script.js)
+    #   - UMAMI_DOMAINS (comma-separated)
+    #   - UMAMI_AUTO_TRACK (true/false, default: true)
     #   - DEBUG_ENV (set to "true" to see env vars in logs)
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
