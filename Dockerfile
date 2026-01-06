@@ -35,7 +35,7 @@ RUN bun run build
 
 # -------- Runtime (tiny, secure) --------
 # Pin to specific version for reproducibility and security
-FROM oven/bun:1.1.38-alpine AS runner
+FROM node:20.18.1-alpine AS runner
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
@@ -44,16 +44,16 @@ WORKDIR /app
 RUN apk add --no-cache curl
 
 # Create non-root user with specific UID/GID for better security
-RUN addgroup --system --gid 1001 bunjs && \
+RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 # Copy standalone server output & static assets with proper ownership
-COPY --chown=nextjs:bunjs --from=builder /app/.next/standalone ./
-COPY --chown=nextjs:bunjs --from=builder /app/.next/static ./.next/static
-COPY --chown=nextjs:bunjs --from=builder /app/public ./public
+COPY --chown=nextjs:nodejs --from=builder /app/.next/standalone ./
+COPY --chown=nextjs:nodejs --from=builder /app/.next/static ./.next/static
+COPY --chown=nextjs:nodejs --from=builder /app/public ./public
 
 # Copy entrypoint script and make it executable
-COPY --chown=nextjs:bunjs docker-entrypoint.sh /app/docker-entrypoint.sh
+COPY --chown=nextjs:nodejs docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
 # Run as non-root for security

@@ -20,6 +20,5 @@ if [ "${NODE_ENV}" != "production" ] || [ "${DEBUG_ENV:-}" = "true" ]; then
 fi
 
 # Start the server
-# Bun akan secara otomatis membaca environment variables dari process.env
-exec bun server.js
-
+# Node akan membaca environment variables dari process.env
+exec node server.js
