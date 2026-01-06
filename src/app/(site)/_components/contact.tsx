@@ -8,14 +8,14 @@ import CloudflareTurnstile from '@/components/cloudflare-turnstile'
 import Section from '@/components/section'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { getTurnstileSiteKey, isTurnstileEnabledClient } from '@/lib/turnstile-config'
 import type { ContactFormResponse } from '@/types'
 
 interface ContactProps {
   emailServicesAvailable: boolean
+  turnstileSiteKey: string
 }
 
-export default function Contact({ emailServicesAvailable }: ContactProps) {
+export default function Contact({ emailServicesAvailable, turnstileSiteKey }: ContactProps) {
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [message, setMessage] = React.useState('')
@@ -26,8 +26,7 @@ export default function Contact({ emailServicesAvailable }: ContactProps) {
   // Note: Client checks NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY to show widget
   // Server checks CLOUDFLARE_TURNSTILE_SECRET_KEY to verify tokens
   // Both keys should be configured together. If only one is set, validation will be inconsistent.
-  const turnstileEnabled = isTurnstileEnabledClient()
-  const turnstileSiteKey = getTurnstileSiteKey()
+  const turnstileEnabled = Boolean(turnstileSiteKey)
 
   // Client-side validation
   function validateForm(): string | null {

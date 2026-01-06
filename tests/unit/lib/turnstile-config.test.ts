@@ -2,8 +2,9 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
   areEmailServicesAvailable,
-  isTurnstileEnabledClient,
   isTurnstileEnabledServer,
+  isTurnstileFullyConfigured,
+  getTurnstileSiteKeyServer,
 } from '@/lib/turnstile-config'
 
 describe('Turnstile Configuration', () => {
@@ -28,7 +29,8 @@ describe('Turnstile Configuration', () => {
       expect(areEmailServicesAvailable()).toBe(true)
     })
 
-    it('should return true when Turnstile is configured', () => {
+    it('should return true when Turnstile is fully configured', () => {
+      process.env.CLOUDFLARE_TURNSTILE_SITE_KEY = 'site-key'
       process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY = 'secret-key'
 
       expect(areEmailServicesAvailable()).toBe(true)
@@ -39,6 +41,7 @@ describe('Turnstile Configuration', () => {
       process.env.SMTP_PORT = '587'
       process.env.SMTP_FROM_EMAIL = 'from@example.com'
       process.env.SMTP_TO_EMAIL = 'to@example.com'
+      process.env.CLOUDFLARE_TURNSTILE_SITE_KEY = 'site-key'
       process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY = 'secret-key'
 
       expect(areEmailServicesAvailable()).toBe(true)
@@ -51,6 +54,7 @@ describe('Turnstile Configuration', () => {
       delete process.env.SMTP_FROM_EMAIL
       delete process.env.SMTP_TO_EMAIL
       delete process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY
+      delete process.env.CLOUDFLARE_TURNSTILE_SITE_KEY
 
       expect(areEmailServicesAvailable()).toBe(false)
     })
@@ -62,15 +66,9 @@ describe('Turnstile Configuration', () => {
       delete process.env.SMTP_FROM_EMAIL
       delete process.env.SMTP_TO_EMAIL
       delete process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY
+      delete process.env.CLOUDFLARE_TURNSTILE_SITE_KEY
 
       expect(areEmailServicesAvailable()).toBe(false)
-    })
-  })
-
-  describe('isTurnstileEnabledClient', () => {
-    it('should return false when not in browser environment', () => {
-      // In Node.js test environment, window is undefined
-      expect(isTurnstileEnabledClient()).toBe(false)
     })
   })
 
@@ -83,6 +81,40 @@ describe('Turnstile Configuration', () => {
     it('should return false when CLOUDFLARE_TURNSTILE_SECRET_KEY is not set', () => {
       delete process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY
       expect(isTurnstileEnabledServer()).toBe(false)
+    })
+  })
+
+  describe('isTurnstileFullyConfigured', () => {
+    it('should return true when site and secret keys are set', () => {
+      process.env.CLOUDFLARE_TURNSTILE_SITE_KEY = 'site-key'
+      process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY = 'secret-key'
+      expect(isTurnstileFullyConfigured()).toBe(true)
+    })
+
+    it('should return false when only site key is set', () => {
+      process.env.CLOUDFLARE_TURNSTILE_SITE_KEY = 'site-key'
+      delete process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY
+      expect(isTurnstileFullyConfigured()).toBe(false)
+    })
+
+    it('should return false when only secret key is set', () => {
+      process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY = 'secret-key'
+      delete process.env.CLOUDFLARE_TURNSTILE_SITE_KEY
+      expect(isTurnstileFullyConfigured()).toBe(false)
+    })
+  })
+
+  describe('getTurnstileSiteKeyServer', () => {
+    it('should prefer CLOUDFLARE_TURNSTILE_SITE_KEY over NEXT_PUBLIC', () => {
+      process.env.CLOUDFLARE_TURNSTILE_SITE_KEY = 'site-key'
+      process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY = 'public-key'
+      expect(getTurnstileSiteKeyServer()).toBe('site-key')
+    })
+
+    it('should fallback to NEXT_PUBLIC when server key is missing', () => {
+      delete process.env.CLOUDFLARE_TURNSTILE_SITE_KEY
+      process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY = 'public-key'
+      expect(getTurnstileSiteKeyServer()).toBe('public-key')
     })
   })
 })

@@ -215,6 +215,19 @@ If `UMAMI_URL` or `UMAMI_WEBSITE_ID` is missing, the script won't load.
 You can also use `NEXT_PUBLIC_UMAMI_*` for build-time injection when needed.
 For Docker/Portainer, set `UMAMI_*` as runtime environment variables; the app reads them on each request.
 
+## ⚙️ Other Environment Variables
+
+These are optional and mostly for build/runtime control:
+
+```env
+ANALYZE=false
+DOCKER_BUILD=true
+DEBUG_ENV=false
+NEXT_TELEMETRY_DISABLED=1
+PORT=3000
+HOSTNAME=0.0.0.0
+```
+
 ## 🚢 Deployment
 
 ### Vercel (Recommended)

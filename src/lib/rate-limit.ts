@@ -4,6 +4,8 @@
  * Simple in-memory rate limiting untuk API routes
  */
 
+import { getIntEnv } from '@/lib/env'
+
 interface RateLimitEntry {
   count: number
   resetAt: number
@@ -33,8 +35,8 @@ export function checkRateLimit(ip: string): {
   remaining: number
   resetAt: number
 } {
-  const maxRequests = parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '5', 10)
-  const windowMs = parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000', 10)
+  const maxRequests = getIntEnv('RATE_LIMIT_MAX_REQUESTS', 5)
+  const windowMs = getIntEnv('RATE_LIMIT_WINDOW_MS', 60000)
 
   const now = Date.now()
   const entry = rateLimitStore.get(ip)

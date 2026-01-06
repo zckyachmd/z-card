@@ -174,7 +174,7 @@ describe('sendContactEmail', () => {
   // Note: These tests check that getTransporter throws errors when env vars are missing
   // Since transporter is cached, we need to test the error handling in sendContactEmail
   // which catches and returns the error instead of throwing
-  it('should return error when SMTP_HOST is not configured', async () => {
+  it('should return warning when SMTP_HOST is not configured', async () => {
     const originalHost = process.env.SMTP_HOST
     delete process.env.SMTP_HOST
     // Clear transporter cache by accessing the module
@@ -187,12 +187,12 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(false)
-    expect(result.error).toContain('SMTP_HOST')
+    expect(result.success).toBe(true)
+    expect(result.warning).toContain('SMTP is not configured')
     process.env.SMTP_HOST = originalHost
   })
 
-  it('should return error when SMTP_PORT is not configured', async () => {
+  it('should return warning when SMTP_PORT is not configured', async () => {
     const originalPort = process.env.SMTP_PORT
     delete process.env.SMTP_PORT
     vi.resetModules()
@@ -204,16 +204,19 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(false)
-    expect(result.error).toContain('SMTP_PORT')
+    expect(result.success).toBe(true)
+    expect(result.warning).toContain('SMTP is not configured')
     process.env.SMTP_PORT = originalPort
   })
 
-  it('should return error when SMTP_USER is not configured', async () => {
+  it('should send email when SMTP_USER is not configured', async () => {
     const originalUser = process.env.SMTP_USER
     delete process.env.SMTP_USER
     vi.resetModules()
     const { sendContactEmail: sendEmail } = await import('@/lib/email')
+    mockSendMail.mockResolvedValue({
+      messageId: 'test-message-id-123',
+    })
 
     const result = await sendEmail({
       name: 'John Doe',
@@ -221,16 +224,18 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(false)
-    expect(result.error).toContain('SMTP_USER')
+    expect(result.success).toBe(true)
     process.env.SMTP_USER = originalUser
   })
 
-  it('should return error when SMTP_PASS is not configured', async () => {
+  it('should send email when SMTP_PASS is not configured', async () => {
     const originalPass = process.env.SMTP_PASS
     delete process.env.SMTP_PASS
     vi.resetModules()
     const { sendContactEmail: sendEmail } = await import('@/lib/email')
+    mockSendMail.mockResolvedValue({
+      messageId: 'test-message-id-123',
+    })
 
     const result = await sendEmail({
       name: 'John Doe',
@@ -238,12 +243,11 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(false)
-    expect(result.error).toContain('SMTP_PASS')
+    expect(result.success).toBe(true)
     process.env.SMTP_PASS = originalPass
   })
 
-  it('should return error when SMTP_FROM_EMAIL is not configured', async () => {
+  it('should return warning when SMTP_FROM_EMAIL is not configured', async () => {
     const originalFrom = process.env.SMTP_FROM_EMAIL
     delete process.env.SMTP_FROM_EMAIL
     vi.resetModules()
@@ -255,12 +259,12 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(false)
-    expect(result.error).toContain('SMTP_FROM_EMAIL')
+    expect(result.success).toBe(true)
+    expect(result.warning).toContain('SMTP is not configured')
     process.env.SMTP_FROM_EMAIL = originalFrom
   })
 
-  it('should return error when SMTP_TO_EMAIL is not configured', async () => {
+  it('should return warning when SMTP_TO_EMAIL is not configured', async () => {
     const originalTo = process.env.SMTP_TO_EMAIL
     delete process.env.SMTP_TO_EMAIL
     vi.resetModules()
@@ -272,8 +276,8 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(false)
-    expect(result.error).toContain('SMTP_TO_EMAIL')
+    expect(result.success).toBe(true)
+    expect(result.warning).toContain('SMTP is not configured')
     process.env.SMTP_TO_EMAIL = originalTo
   })
 

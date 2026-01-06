@@ -5,6 +5,8 @@
  * Uses honeypot field dan submission timing
  */
 
+import { getIntEnv } from '@/lib/env'
+
 interface RobotCheckResult {
   isRobot: boolean
   reason?: string
@@ -27,7 +29,7 @@ export function validateRobot(data: {
 
   // Submission timing check: If submitted too fast (< 2 seconds), likely a bot
   if (data.submissionTime) {
-    const minSubmissionTime = parseInt(process.env.ROBOT_MIN_SUBMISSION_TIME || '2000', 10) // 2 seconds
+    const minSubmissionTime = getIntEnv('ROBOT_MIN_SUBMISSION_TIME', 2000) // 2 seconds
     if (data.submissionTime < minSubmissionTime) {
       return {
         isRobot: true,

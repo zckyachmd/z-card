@@ -6,6 +6,7 @@
 
 import nodemailer from 'nodemailer'
 
+import { getIntEnv } from '@/lib/env'
 import type { ContactFormData } from '@/types'
 
 interface EmailMetadata {
@@ -49,7 +50,7 @@ function getTransporter(): nodemailer.Transporter | null {
 
   transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST!,
-    port: parseInt(process.env.SMTP_PORT!, 10),
+    port: getIntEnv('SMTP_PORT', 587),
     secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
     ...(requiresAuth && {
       auth: {

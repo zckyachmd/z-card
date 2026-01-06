@@ -6,7 +6,7 @@
 
 import { z } from 'zod'
 
-import { isTurnstileEnabledServer } from '@/lib/turnstile-config'
+import { isTurnstileFullyConfigured } from '@/lib/turnstile-config'
 
 /**
  * Base contact form validation schema
@@ -49,7 +49,7 @@ const baseContactFormSchema = z.object({
  */
 export const contactFormSchema = baseContactFormSchema.superRefine((data, ctx) => {
   // If Turnstile is enabled on server but no token provided, add error
-  if (isTurnstileEnabledServer() && !data.turnstileToken) {
+  if (isTurnstileFullyConfigured() && !data.turnstileToken) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message:

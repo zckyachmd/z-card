@@ -11,7 +11,7 @@ import { sendContactEmail } from '@/lib/email'
 import { checkRateLimit, getClientIP } from '@/lib/rate-limit'
 import { validateRobot } from '@/lib/robot-validation'
 import { verifyTurnstileToken } from '@/lib/turnstile'
-import { isTurnstileEnabledServer } from '@/lib/turnstile-config'
+import { isTurnstileFullyConfigured } from '@/lib/turnstile-config'
 import { validateContactForm } from '@/lib/validation'
 import type { ContactFormResponse } from '@/types'
 
@@ -132,7 +132,7 @@ export async function POST(request: Request) {
     // Note: Server checks CLOUDFLARE_TURNSTILE_SECRET_KEY, while client checks
     // NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY. Both keys should be configured
     // together for proper functionality. If only one is set, validation will be inconsistent.
-    const turnstileEnabled = isTurnstileEnabledServer()
+    const turnstileEnabled = isTurnstileFullyConfigured()
     if (turnstileEnabled) {
       const turnstileToken = validation.data.turnstileToken
       if (!turnstileToken) {

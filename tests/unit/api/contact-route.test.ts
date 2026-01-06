@@ -223,14 +223,20 @@ describe('POST /api/contact', () => {
     expect(data.success).toBe(true)
     expect(data.message).toBe('Message sent successfully')
     expect(response.status).toBe(200)
-    expect(sendContactEmail).toHaveBeenCalledWith({
-      name: 'John Doe',
-      email: 'john@example.com',
-      message: 'Test message with enough characters.',
-    })
+    expect(sendContactEmail).toHaveBeenCalledWith(
+      {
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'Test message with enough characters.',
+      },
+      expect.objectContaining({
+        ipAddress: '127.0.0.1',
+        submissionTime: 5000,
+      }),
+    )
   })
 
-  it('should return 500 when email sending fails', async () => {
+  it('should return 200 even when email sending fails', async () => {
     const { checkRateLimit } = await import('@/lib/rate-limit')
     const { getClientIP } = await import('@/lib/rate-limit')
     vi.mocked(getClientIP).mockReturnValue('127.0.0.1')
@@ -272,9 +278,9 @@ describe('POST /api/contact', () => {
     const response = await POST(request)
     const data = await response.json()
 
-    expect(data.success).toBe(false)
-    expect(data.error).toBe('SMTP connection failed')
-    expect(response.status).toBe(500)
+    expect(data.success).toBe(true)
+    expect(data.message).toBe('Message sent successfully')
+    expect(response.status).toBe(200)
   })
 
   it('should return 500 on unexpected error', async () => {
@@ -297,7 +303,9 @@ describe('POST /api/contact', () => {
     const data = await response.json()
 
     expect(data.success).toBe(false)
-    expect(data.error).toBe('Internal server error')
+    expect(data.error).toBe(
+      'An error occurred while processing your request. Please try again later.',
+    )
     expect(response.status).toBe(500)
   })
 
@@ -341,11 +349,17 @@ describe('POST /api/contact', () => {
 
     await POST(request)
 
-    expect(sendContactEmail).toHaveBeenCalledWith({
-      name: 'John Doe',
-      email: 'john@example.com',
-      message: 'Test message with enough characters.',
-    })
+    expect(sendContactEmail).toHaveBeenCalledWith(
+      {
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'Test message with enough characters.',
+      },
+      expect.objectContaining({
+        ipAddress: '127.0.0.1',
+        submissionTime: 5000,
+      }),
+    )
     expect(sendContactEmail).not.toHaveBeenCalledWith(
       expect.objectContaining({
         honeypot: expect.anything(),
