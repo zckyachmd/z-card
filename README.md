@@ -213,6 +213,7 @@ This project supports optional Umami tracking via environment variables.
 
 If `UMAMI_URL` or `UMAMI_WEBSITE_ID` is missing, the script won't load.
 You can also use `NEXT_PUBLIC_UMAMI_*` for build-time injection when needed.
+For Docker/Portainer, set `UMAMI_*` as runtime environment variables; the app reads them on each request.
 
 ## 🚢 Deployment
 

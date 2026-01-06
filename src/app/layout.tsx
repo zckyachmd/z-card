@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
+import { headers } from 'next/headers'
 import Script from 'next/script'
 
 import Footer from '@/components/footer'
@@ -115,6 +116,7 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  headers()
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
