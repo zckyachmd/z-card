@@ -42,7 +42,7 @@ const Contact = nextDynamic(() => import('@/app/(site)/_components/contact-wrapp
 })
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs' // Next.js only supports 'nodejs' or 'edge', but we run it with Bun
+export const runtime = 'nodejs'
 
 export default function HomePage() {
   return (
