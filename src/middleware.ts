@@ -6,19 +6,44 @@
 
 import { type NextRequest, NextResponse } from 'next/server'
 
+function getUmamiOrigin(): string | null {
+  const raw = process.env.UMAMI_URL ?? process.env.NEXT_PUBLIC_UMAMI_URL
+  if (!raw) {
+    return null
+  }
+  try {
+    return new URL(raw).origin
+  } catch {
+    return null
+  }
+}
+
 export function middleware(_request: NextRequest) {
   const response = NextResponse.next()
+  const umamiOrigin = getUmamiOrigin()
 
   // Security Headers
+  const scriptSrc = [
+    "'self'",
+    "'unsafe-eval'",
+    "'unsafe-inline'",
+    'https://challenges.cloudflare.com',
+    'https://static.cloudflareinsights.com',
+    umamiOrigin,
+  ].filter(Boolean)
+
+  const connectSrc = ["'self'", 'https://challenges.cloudflare.com', umamiOrigin].filter(Boolean)
+
   const securityHeaders = {
     // Content Security Policy
     'Content-Security-Policy': [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com",
+      `script-src ${scriptSrc.join(' ')}`,
+      `script-src-elem ${scriptSrc.join(' ')}`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: https: blob:",
-      "connect-src 'self' https://challenges.cloudflare.com",
+      `connect-src ${connectSrc.join(' ')}`,
       "frame-src 'self' https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",
