@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Download } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
