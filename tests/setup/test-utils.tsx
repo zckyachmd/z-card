@@ -1,6 +1,6 @@
-import { render, type RenderOptions } from '@testing-library/react'
 import { type ReactElement } from 'react'
 import { ThemeProvider } from 'next-themes'
+import { render, type RenderOptions } from '@testing-library/react'
 
 /**
  * Custom render function dengan providers

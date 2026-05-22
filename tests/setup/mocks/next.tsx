@@ -4,8 +4,8 @@
  * Mocks common Next.js modules yang tidak available di test environment
  */
 
-import { vi } from 'vitest'
 import React from 'react'
+import { vi } from 'vitest'
 
 // Mock next/image
 vi.mock('next/image', () => ({
@@ -16,7 +16,6 @@ vi.mock('next/image', () => ({
     height?: number
     [key: string]: unknown
   }) => {
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     return React.createElement('img', {
       src: props.src,
       alt: props.alt,

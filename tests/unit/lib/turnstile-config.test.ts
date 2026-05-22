@@ -2,9 +2,9 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
   areEmailServicesAvailable,
+  getTurnstileSiteKeyServer,
   isTurnstileEnabledServer,
   isTurnstileFullyConfigured,
-  getTurnstileSiteKeyServer,
 } from '@/lib/turnstile-config'
 
 describe('Turnstile Configuration', () => {

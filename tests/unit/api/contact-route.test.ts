@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { POST, GET } from '@/app/api/contact/route'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { GET, POST } from '@/app/api/contact/route'
+import { sendContactEmail } from '@/lib/email'
 import { validateRobot } from '@/lib/robot-validation'
 import { validateContactForm } from '@/lib/validation'
-import { sendContactEmail } from '@/lib/email'
 
 // Mock dependencies
 vi.mock('@/lib/rate-limit', () => ({

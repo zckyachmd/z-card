@@ -287,7 +287,9 @@ describe('sendContactEmail', () => {
     vi.resetModules()
     const { sendContactEmail: sendEmail } = await import('@/lib/email')
     const nodemailerMock = await import('nodemailer')
-    const mockCreateTransport = nodemailerMock.default.createTransport as unknown as ReturnType<typeof vi.fn>
+    const mockCreateTransport = nodemailerMock.default.createTransport as unknown as ReturnType<
+      typeof vi.fn
+    >
     const mockSendMailFn = vi.fn().mockResolvedValue({
       messageId: 'test-message-id-123',
     })
@@ -314,7 +316,9 @@ describe('sendContactEmail', () => {
     vi.resetModules()
     const { sendContactEmail: sendEmail } = await import('@/lib/email')
     const nodemailerMock = await import('nodemailer')
-    const mockCreateTransport = nodemailerMock.default.createTransport as unknown as ReturnType<typeof vi.fn>
+    const mockCreateTransport = nodemailerMock.default.createTransport as unknown as ReturnType<
+      typeof vi.fn
+    >
     const mockSendMailFn = vi.fn().mockResolvedValue({
       messageId: 'test-message-id-123',
     })

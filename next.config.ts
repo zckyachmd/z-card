@@ -27,5 +27,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 export default withBundleAnalyzer(nextConfig)

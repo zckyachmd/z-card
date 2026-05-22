@@ -1,13 +1,14 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
+import { site } from '@/config/site'
 import {
-  personLdJson,
-  mailto,
   baseHostname,
   buildEmail,
-  buildWebsite,
   buildVCard,
+  buildWebsite,
+  mailto,
+  personLdJson,
 } from '@/lib/siteHelpers'
-import { site } from '@/config/site'
 
 describe('personLdJson', () => {
   it('should return valid Person schema.org JSON-LD', () => {
