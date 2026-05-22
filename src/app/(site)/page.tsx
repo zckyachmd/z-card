@@ -58,7 +58,7 @@ export default function HomePage() {
             jobTitle: 'Full-Stack Web Developer',
             address: {
               '@type': 'PostalAddress',
-              addressLocality: 'Cimahi',
+              addressLocality: 'Jakarta',
               addressCountry: 'ID',
             },
             email: 'hi@zacky.id',

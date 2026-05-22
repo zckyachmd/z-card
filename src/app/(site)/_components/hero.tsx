@@ -18,7 +18,7 @@ export default function Hero() {
         <div className='flex flex-col items-start gap-6'>
           <span className='inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs md:text-sm'>
             <MapPin className='size-3.5' aria-hidden='true' />
-            Based in Cimahi, Indonesia
+            Based in Jakarta, Indonesia
           </span>
 
           <h1 className='text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl'>

@@ -7,7 +7,7 @@ export const site = {
   tagline: 'Clean, secure, and efficient systems.',
   location: {
     countryCode: 'ID',
-    city: 'Cimahi',
+    city: 'Jakarta',
     country: 'Indonesia',
   },
   phone: '+62-853-406-9191',

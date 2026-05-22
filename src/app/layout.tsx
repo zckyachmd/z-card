@@ -42,7 +42,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Zacky Achmad — Full-Stack Web Developer',
   description:
-    'Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Cimahi, Indonesia. Clean, secure, and efficient systems.',
+    'Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Jakarta, Indonesia. Clean, secure, and efficient systems.',
   metadataBase: new URL('https://zacky.id'),
   alternates: { canonical: '/' },
   keywords: [
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     'Web Developer',
     'Portfolio',
     'Indonesia',
-    'Cimahi',
+    'Jakarta',
     'Backend Developer',
     'Frontend Developer',
     'Software Engineer',
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Zacky Achmad — Full-Stack Web Developer',
-    description: 'Clean, secure, and efficient systems. Based in Cimahi, Indonesia.',
+    description: 'Clean, secure, and efficient systems. Based in Jakarta, Indonesia.',
     url: '/',
     siteName: 'zacky.id',
     type: 'website',

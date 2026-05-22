@@ -1,7 +1,7 @@
 {
   "name": "Zacky Achmad - Full-Stack Web Developer",
   "short_name": "Zacky Achmad",
-  "description": "Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Cimahi, Indonesia.",
+  "description": "Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Jakarta, Indonesia.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -30,4 +30,3 @@
   "lang": "en",
   "dir": "ltr"
 }
-
