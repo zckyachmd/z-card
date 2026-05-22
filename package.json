@@ -3,29 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "bun run next dev --turbopack",
-    "build": "bun run next build",
-    "start": "bun run next start",
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
     "prepare": "husky install",
     "type-check": "tsc --noEmit -p tsconfig.json",
-    "lint": "bun run next lint",
-    "lint:fix": "bun run next lint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
-    "test": "bun run vitest run",
-    "test:watch": "bun run vitest",
-    "test:coverage": "bun run vitest run --coverage",
-    "test:ui": "bun run vitest --ui",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:headed": "playwright test --headed",
-    "analyze": "ANALYZE=true bun run next build"
+    "analyze": "ANALYZE=true next build"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx,css,md}": [
       "prettier --write",
-      "next lint --fix --file"
+      "eslint --fix"
     ]
   },
   "dependencies": {
