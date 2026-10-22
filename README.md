@@ -24,6 +24,8 @@ Playwright starts the production server; build first and leave port 3000 free. T
 
 ## Documentation
 
+[Delivery report and verification limits](docs/DELIVERY.md) · [Pull request #20](https://github.com/zckyachmd/z-card/pull/20)
+
 - [Architecture and decisions](docs/ARCHITECTURE.md)
 - [Content authoring](docs/CONTENT.md)
 - [Environment and deployment](docs/DEPLOYMENT.md)

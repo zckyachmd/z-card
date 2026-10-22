@@ -1,6 +1,7 @@
 import http from 'k6/http'
 import { check } from 'k6'
 import { Counter } from 'k6/metrics'
+import execution from 'k6/execution'
 
 const base = (__ENV.BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '')
 const host = base
@@ -76,11 +77,13 @@ const thresholds = {
   checks: ['rate>=0.99'],
   'dropped_iterations{scenario:pages}': ['count==0'],
 }
-for (const [route] of routes)
+for (const [route] of routes) {
+  thresholds[`http_reqs{route:${route},scenario:pages}`] = ['count>0']
   thresholds[`http_req_duration{route:${route},scenario:pages}`] = [
     `p(95)<${__ENV.P95 || 500}`,
     `p(99)<${__ENV.P99 || 1000}`,
   ]
+}
 export const options = {
   scenarios: {
     pages: profiles[profile],
@@ -108,11 +111,15 @@ export function setup() {
 export default function userTraffic() {
   const total = routes.reduce((sum, route) => sum + route[1], 0)
   let pick = Math.random() * total
-  const route =
+  const weightedRoute =
     routes.find(route => {
       pick -= route[1]
       return pick < 0
     })?.[0] || '/'
+  const route =
+    execution.scenario.iterationInTest < routes.length
+      ? routes[execution.scenario.iterationInTest][0]
+      : weightedRoute
   const response = http.get(`${base}${route}`, { tags: { route, phase: 'steady' } })
   statuses.add(1, { status: String(response.status), route })
   pageRequests.add(1, { route })

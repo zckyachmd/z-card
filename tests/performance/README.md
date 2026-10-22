@@ -1,5 +1,7 @@
 # Performance validation
 
+Every page scenario starts by visiting each configured route once, then samples the weighted distribution. Route-specific request-count thresholds require real samples as well as latency compliance, preventing a short smoke run from silently omitting a rare route. `COMPARE_HOME=true` reduces traffic to the common homepage for reproducible legacy comparisons.
+
 Test `pnpm build && pnpm start`, never the development server. Create `tests/performance/results` first. Run `k6 run tests/performance/http.js`; defaults to a safe loopback smoke profile. `PROFILE=baseline RATE=10 DURATION=30s k6 run tests/performance/http.js` provides a repeatable warm-cache baseline. `PROFILE=load` ramps up, sustains traffic, then ramps down. `stress`, `spike`, and `soak` are manual profiles. Configure `BASE_URL`, `RATE`, `VUS`, `DURATION`, `P95`, `P99`, and `OUTPUT` as needed.
 
 Remote targets require `ALLOW_REMOTE=true`; this is a technical guard, not authorization to stress public production. Only load isolated environments you control. `ARTICLE_PATH=/blog/your-published-slug` includes a real article; no article exists initially and the unpublished template must not become public benchmark content. Health has a separate scenario. No scenario sends contact messages or invokes external verification.

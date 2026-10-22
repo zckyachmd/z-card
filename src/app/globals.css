@@ -1759,8 +1759,8 @@ em {
   .portfolio-intro {
     animation: portfolio-arrive 500ms var(--ease-out) both;
   }
-  .profile-composition {
-    animation: portfolio-arrive 650ms var(--ease-out) both;
+  .profile-composition .mini-contact {
+    animation: portfolio-arrive 500ms var(--ease-out) both;
   }
   .page-intro {
     animation: portfolio-arrive 300ms var(--ease-out) both;

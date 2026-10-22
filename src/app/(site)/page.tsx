@@ -70,7 +70,8 @@ export default function HomePage() {
               src='/zacky-achmad.jpg'
               alt='Zacky Achmad'
               fill
-              priority
+              preload
+              fetchPriority='high'
               sizes='(max-width: 640px) 80vw, 400px'
             />
             <figcaption>

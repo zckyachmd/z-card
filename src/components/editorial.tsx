@@ -75,7 +75,7 @@ export function ProjectList({ limit = projects.length }: { limit?: number }) {
           <Link
             href={`/projects/${project.slug}`}
             className='project-read'
-            aria-label={`Read about ${project.name}`}
+            aria-label={`Read project: ${project.name}`}
           >
             Read project <span aria-hidden='true'>↗</span>
           </Link>

@@ -1,6 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { DigitalCard } from '@/components/digital-card'
+import dynamic from 'next/dynamic'
+const DigitalCard = dynamic(() =>
+  import('@/components/digital-card').then(module => module.DigitalCard),
+)
 export function SaveContact() {
   const [open, setOpen] = useState(false)
   return (
@@ -8,7 +11,7 @@ export function SaveContact() {
       <button className='text-link' onClick={() => setOpen(true)}>
         Save contact card
       </button>
-      <DigitalCard open={open} onOpenChange={setOpen} />
+      {open && <DigitalCard open={open} onOpenChange={setOpen} />}
     </>
   )
 }

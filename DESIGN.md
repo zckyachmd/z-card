@@ -94,7 +94,7 @@ Fine rules organize projects, experience, and supporting writing. Project rows a
 
 Tonal surfaces and fine borders provide most depth. Rounded portrait and contact-card layers add physical character; overlays use elevation where needed. This is not a globally shadow-free system.
 
-Motion clarifies arrival, selection, and exploration. Hero layers translate upward from (12px) over (500–650ms); interior introductions use (300ms). These arrivals preserve full opacity. The main easing is `cubic-bezier(0.23, 1, 0.32, 1)`. Fine-pointer hover shifts project rows and portrait/card layers; button presses scale to (.97). Touch does not inherit hover transforms.
+Motion clarifies arrival, selection, and exploration. Hero text and the small contact-card layer translate upward from (12px) over (500ms); interior introductions use (300ms). The portrait itself does not animate on arrival, so its LCP rendering is not delayed. Arrivals preserve full opacity. The main easing is `cubic-bezier(0.23, 1, 0.32, 1)`. Fine-pointer hover shifts project rows and portrait/card layers; button presses scale to (.97). Touch does not inherit hover transforms.
 
 **The Motion Equivalence Rule.** Reduced motion removes entrances, positional movement, rotation, and drawing animations while preserving final state, selected content, navigation, progress, and completion. No looping animation or scroll hijacking is part of this world.
 

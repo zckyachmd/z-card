@@ -19,7 +19,7 @@ export default function Navbar() {
         <Link
           href='/'
           className='wordmark'
-          aria-label='Zacky Achmad home'
+          aria-label='zacky.id — Zacky Achmad home'
           onClick={() => setOpen(false)}
         >
           zacky<span>.id</span>
