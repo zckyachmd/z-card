@@ -45,8 +45,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <Footer />
           <AnalyticsConsent />
+          <Toaster />
         </ThemeProvider>
-        <Toaster />
         <JsonLd
           data={{
             '@context': 'https://schema.org',

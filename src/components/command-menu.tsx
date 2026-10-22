@@ -64,7 +64,7 @@ export function CommandMenu() {
       <button
         ref={trigger}
         className='command-trigger'
-        aria-label='Open command menu'
+        aria-label='Navigate — Open command menu'
         aria-keyshortcuts='Control+k Meta+k'
         onClick={() => {
           setQuery('')
