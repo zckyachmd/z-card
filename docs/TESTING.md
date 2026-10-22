@@ -1,5 +1,7 @@
 # Testing
 
+CI fails on flaky tests even if a retry passes (`failOnFlakyTests`). Retry traces remain available for diagnosis. Analytics assertions poll for initialized data rather than throwing while the script loader is still pending; the assertion still requires exactly one page view per route.
+
 Run from the pinned Node/pnpm environment. `pnpm format:check`, `pnpm lint`, `pnpm type-check`, `pnpm test`, `pnpm build`, and `pnpm audit --prod --audit-level=high` are independent gates. Vitest uses jsdom for UI/browser utilities and node for filesystem publishing checks. Contact delivery is mocked: do not send real email in automated tests.
 
 Playwright: `pnpm exec playwright install chromium firefox webkit`, build, leave port 3000 free, then `pnpm test:e2e`. The config starts `pnpm start`, never next dev. Browser engines are not silently disabled. Tests cover pages/navigation, metadata/404s/feed/sitemap, responsive menu, theme/device preference, reduced motion, digital card, interactive skill tree, command menu, contact labels and input rejection, plus representative axe checks.

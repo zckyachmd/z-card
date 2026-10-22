@@ -23,7 +23,7 @@ test('analytics waits for consent and sends one page view without private query 
     .poll(() =>
       page.evaluate(
         () =>
-          (window as unknown as { dataLayer: unknown[][] }).dataLayer.filter(
+          ((window as unknown as { dataLayer?: unknown[][] }).dataLayer ?? []).filter(
             item => item[0] === 'event' && item[1] === 'page_view',
           ).length,
       ),
@@ -38,7 +38,7 @@ test('analytics waits for consent and sends one page view without private query 
     .poll(() =>
       page.evaluate(
         () =>
-          (window as unknown as { dataLayer: unknown[][] }).dataLayer.filter(
+          ((window as unknown as { dataLayer?: unknown[][] }).dataLayer ?? []).filter(
             item => item[0] === 'event' && item[1] === 'page_view',
           ).length,
       ),
