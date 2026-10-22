@@ -44,7 +44,7 @@ Performance evidence is in ../PERFORMANCE_REPORT.md. k6 smoke, comparable old/ne
 
 ## Actual tests and evidence
 
-- `pnpm test`: 151 tests passed across 10 files.
+- `pnpm test`: 152 tests passed across 10 files, including preservation of valid reply addresses longer than 100 characters.
 - `pnpm lint`, `pnpm type-check`, `pnpm format:check`, `pnpm build`: passed locally and in the first complete Quality CI run.
 - Local Chromium/WebKit main journeys: 24 passed; separate article/analytics fixture checks: 6 passed. Follow-up navigation/digital-card/accessibility checks: 6 passed. Local Firefox could not start its temporary profile; Linux CI retains and executes it.
 - GitHub Quality run https://github.com/zckyachmd/z-card/actions/runs/39771584238 completed successfully, including three-engine browser verification, isolated fixtures, security audit and safe k6 smoke/baseline/load gates. Check the latest head run before merging subsequent commits.

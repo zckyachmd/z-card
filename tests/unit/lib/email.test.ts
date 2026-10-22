@@ -117,6 +117,18 @@ describe('sendContactEmail', () => {
     expect(callArgs?.text).toContain('Test message')
   })
 
+  it('preserves valid reply addresses longer than 100 characters', async () => {
+    mockSendMail.mockResolvedValue({ messageId: 'long-address-test' })
+    const email = `${'a'.repeat(64)}@${'b'.repeat(50)}.example.com`
+    const result = await sendContactEmail({
+      name: 'Test Person',
+      email,
+      message: 'A test message.',
+    })
+    expect(result.success).toBe(true)
+    expect(mockSendMail.mock.calls[0]?.[0].replyTo).toBe(email)
+  })
+
   it('should return error when email sending fails', async () => {
     mockSendMail.mockRejectedValue(new Error('SMTP connection failed'))
 

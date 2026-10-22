@@ -330,7 +330,7 @@ function sanitizeEmailHeader(value: string): string {
     .replace(/[\r\n]/g, '') // Remove newlines and carriage returns
     .replace(/[<>]/g, '') // Remove angle brackets
     .trim()
-    .slice(0, 100) // Limit length
+    .slice(0, 255) // Preserve addresses accepted by the contact schema.
 }
 
 /**
