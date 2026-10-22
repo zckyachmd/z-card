@@ -26,7 +26,7 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild variant='outline'>
-            <Link href='/#contact'>
+            <Link href='/contact'>
               <Mail className='mr-2 size-4' />
               Contact me
             </Link>

@@ -1,0 +1,9 @@
+{
+  "slug": "publishing-template",
+  "title": "Unpublished authoring example",
+  "description": "A private template for future technical writing. Replace with the owner's original writing before publication.",
+  "publishedAt": "2026-10-22",
+  "draft": true,
+  "category": "Engineering",
+  "tags": ["authoring"]
+}

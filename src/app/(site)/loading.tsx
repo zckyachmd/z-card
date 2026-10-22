@@ -3,10 +3,10 @@ import HeroSkeleton from '@/components/skeletons/hero-skeleton'
 
 export default function Loading() {
   return (
-    <main>
+    <div role='status' aria-label='Loading page'>
       <Section id='home' full>
         <HeroSkeleton />
       </Section>
-    </main>
+    </div>
   )
 }

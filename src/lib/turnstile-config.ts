@@ -53,7 +53,5 @@ function isSMTPConfigured(): boolean {
  * Note: This function accesses server environment variables and should not be used in client components
  */
 export function areEmailServicesAvailable(): boolean {
-  const smtpConfigured = isSMTPConfigured()
-  const turnstileConfigured = isTurnstileFullyConfigured()
-  return smtpConfigured || turnstileConfigured
+  return isSMTPConfigured()
 }

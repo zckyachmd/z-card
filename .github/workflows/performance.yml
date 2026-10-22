@@ -1,0 +1,53 @@
+name: Manual performance
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        type: choice
+        options: [baseline, load, stress, spike, soak]
+        default: load
+      rate:
+        type: string
+        default: '20'
+      duration:
+        type: string
+        default: '60s'
+permissions:
+  contents: read
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: docker build -t z-card-benchmark .
+      - uses: grafana/setup-k6-action@v1
+        with:
+          k6-version: '2.3.0'
+      - name: Measure isolated container
+        env:
+          PROFILE: ${{ inputs.profile }}
+          RATE: ${{ inputs.rate }}
+          DURATION: ${{ inputs.duration }}
+        run: |
+          mkdir -p tests/performance/results
+          docker run -d --name z-card-benchmark --cpus=2 --memory=1g -p 3000:3000 z-card-benchmark
+          trap 'docker rm -f z-card-benchmark' EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:3000/api/health && break; sleep 1; done
+          node tests/performance/resources.mjs z-card-benchmark tests/performance/results/resources.jsonl container &
+          sampler_pid=$!
+          export COMMIT_SHA="$GITHUB_SHA" NODE_VERSION="24.22.1" NEXT_VERSION="$(node -p "require('next/package.json').version")" K6_VERSION="$(k6 version)" TEST_ENVIRONMENT="GitHub hosted container" RESOURCE_LIMITS="2 CPUs, 1 GiB"
+          k6 run --out json=tests/performance/results/raw.json tests/performance/http.js
+          kill "$sampler_pid"
+          test "$(docker inspect -f '{{.RestartCount}}' z-card-benchmark)" = 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manual-performance
+          path: tests/performance/results

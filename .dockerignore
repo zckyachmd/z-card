@@ -1,95 +1,23 @@
-# Dependencies
 node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-bun-debug.log*
-pnpm-lock.yaml
-yarn.lock
-package-lock.json
-# Note: bun.lock should NOT be ignored - it's needed for Docker build
-
-# Testing
+.next
+.git
+.github
+.husky
+.codebase-memory
+.codegraph
+.agents
+.codex
+.env*
 coverage
 test-results
 playwright-report
-.vitest
 tests
-
-# Next.js
-.next
-out
-.vercel
-
-# Production
-build
-dist
-
-# Environment variables (CRITICAL - jangan include secrets)
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Debug
-*.log
-logs
-
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Git
-.git
-.gitignore
-.gitattributes
-
-# Documentation (tidak perlu di production image)
-*.md
 docs
+*.log
+*.tsbuildinfo
+.DS_Store
 README.md
 CONTRIBUTING.md
-LICENSE
-
-# CI/CD
-.github
-.gitlab-ci.yml
-.travis.yml
-.circleci
-
-# Temporary files
-*.tmp
-*.temp
-.cache
-*.tsbuildinfo
-
-# Docker files (tidak perlu di dalam image)
-Dockerfile
-docker-compose.yml
-.dockerignore
-
-# BMAD documentation (tidak perlu di production)
-.bmad
-
-# Test files
-*.test.ts
-*.test.tsx
-*.spec.ts
-*.spec.tsx
-
-# Development tools
-playwright.config.ts
-vitest.config.ts
-eslint.config.mjs
-prettier.config.cjs
-# Note: tsconfig.json is needed for Next.js path alias resolution during build
-
+DESIGN.md
+PRODUCT.md
+PERFORMANCE_REPORT.md

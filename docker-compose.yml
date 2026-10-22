@@ -4,6 +4,8 @@ services:
     build:
       context: .
       target: runner
+      args:
+        NEXT_PUBLIC_GA_MEASUREMENT_ID: ${NEXT_PUBLIC_GA_MEASUREMENT_ID:-}
     # Environment variables
     # IMPORTANT: Environment variables set in Portainer UI will be available to the container
     # Portainer passes env vars to Docker, which are then available in process.env
@@ -63,15 +65,13 @@ services:
     # Security: Drop all capabilities and only add what's needed
     cap_drop:
       - ALL
-    cap_add:
-      - NET_BIND_SERVICE  # Required to bind to port 3000
 
     # Security: Use specific user (non-root)
     user: "1001:1001"
 
     # Health check using curl (now available in image)
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 3s
       retries: 3

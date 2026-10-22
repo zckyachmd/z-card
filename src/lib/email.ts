@@ -4,7 +4,7 @@
  * Email service menggunakan Nodemailer dengan SMTP
  */
 
-import nodemailer from 'nodemailer'
+import nodemailer, { type Transporter } from 'nodemailer'
 
 import { getIntEnv } from '@/lib/env'
 import type { ContactFormData } from '@/types'
@@ -17,7 +17,7 @@ interface EmailMetadata {
 }
 
 // Create reusable transporter
-let transporter: nodemailer.Transporter | null = null
+let transporter: Transporter | null = null
 
 /**
  * Check if SMTP is configured
@@ -35,7 +35,7 @@ export function isSMTPConfigured(): boolean {
  * Initialize email transporter
  * Returns null if SMTP is not configured (graceful fallback)
  */
-function getTransporter(): nodemailer.Transporter | null {
+function getTransporter(): Transporter | null {
   if (transporter) {
     return transporter
   }
@@ -79,30 +79,9 @@ export async function sendContactEmail(
 
   // If SMTP is not configured, log to console and return success
   if (!mailTransporter) {
-    const submissionText = `
-New Contact Form Submission (SMTP not configured - logged to console)
-
-Name: ${data.name}
-Email: ${data.email}
-
-Message:
-${data.message}
-    `.trim()
-
-    // eslint-disable-next-line no-console
-    console.log('='.repeat(60))
-    // eslint-disable-next-line no-console
-    console.log('CONTACT FORM SUBMISSION (SMTP not configured)')
-    // eslint-disable-next-line no-console
-    console.log('='.repeat(60))
-    // eslint-disable-next-line no-console
-    console.log(submissionText)
-    // eslint-disable-next-line no-console
-    console.log('='.repeat(60))
-
     return {
-      success: true,
-      warning: 'SMTP is not configured. Submission logged to server console.',
+      success: false,
+      error: 'Email delivery is unavailable',
     }
   }
 
@@ -299,10 +278,10 @@ Please reply to: ${safeEmail}
     `.trim()
 
     const mailOptions = {
-      from: `"${escapeHtml(data.name)}" <${process.env.SMTP_FROM_EMAIL}>`,
+      from: { name: safeName, address: process.env.SMTP_FROM_EMAIL! },
       to: process.env.SMTP_TO_EMAIL,
-      replyTo: data.email,
-      subject: `New message from ${escapeHtml(data.name)}`,
+      replyTo: safeEmail,
+      subject: `New message from ${safeName}`,
       html: htmlTemplate,
       text: textTemplate,
     }
@@ -320,7 +299,7 @@ Please reply to: ${safeEmail}
       success: true,
     }
   } catch (error) {
-    console.error('Email sending error:', error)
+    console.error('Email delivery failed')
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',

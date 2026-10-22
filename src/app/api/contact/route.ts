@@ -78,8 +78,22 @@ export async function POST(request: Request) {
     let body: unknown
     try {
       // Read body as text first to check size
-      const text = await request.text()
-      if (text.length > MAX_BODY_SIZE) {
+      const reader = request.body?.getReader()
+      const chunks: Uint8Array[] = []
+      let bytes = 0
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          bytes += value.byteLength
+          if (bytes > MAX_BODY_SIZE) {
+            await reader.cancel()
+            break
+          }
+          chunks.push(value)
+        }
+      }
+      if (bytes > MAX_BODY_SIZE) {
         return NextResponse.json<ContactFormResponse>(
           {
             success: false,
@@ -92,6 +106,7 @@ export async function POST(request: Request) {
       }
 
       // Parse JSON
+      const text = Buffer.concat(chunks).toString('utf8')
       body = JSON.parse(text)
     } catch (error) {
       // Handle JSON parse errors
@@ -207,17 +222,14 @@ export async function POST(request: Request) {
     // If email sending fails, still return success but log the error
     // This allows form submissions even when SMTP is misconfigured
     if (!emailResult.success) {
-      console.error('Email sending failed:', emailResult.error)
-      // Log submission to console as fallback
-      // eslint-disable-next-line no-console
-      console.log('Contact form submission (email failed):', {
-        name: emailData.name,
-        email: emailData.email,
-        message: emailData.message,
-        timestamp: new Date().toISOString(),
-      })
-      // Return success to user, but log the issue
-      // In production, you might want to use a logging service or database
+      console.error('Contact email delivery failed')
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Message could not be delivered. Please email hi@zacky.id directly.',
+        },
+        { status: 503 },
+      )
     }
 
     // Success response
@@ -237,7 +249,10 @@ export async function POST(request: Request) {
     )
   } catch (error) {
     // Log full error for debugging (server-side only)
-    console.error('Contact API error:', error)
+    console.error(
+      'Contact request failed',
+      error instanceof SyntaxError ? 'invalid-json' : 'internal-error',
+    )
 
     // Return generic error to client (prevent information disclosure)
     return NextResponse.json<ContactFormResponse>(

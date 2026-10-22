@@ -237,7 +237,7 @@ describe('POST /api/contact', () => {
     )
   })
 
-  it('should return 200 even when email sending fails', async () => {
+  it('should return 503 when email sending fails without claiming delivery', async () => {
     const { checkRateLimit } = await import('@/lib/rate-limit')
     const { getClientIP } = await import('@/lib/rate-limit')
     vi.mocked(getClientIP).mockReturnValue('127.0.0.1')
@@ -279,9 +279,9 @@ describe('POST /api/contact', () => {
     const response = await POST(request)
     const data = await response.json()
 
-    expect(data.success).toBe(true)
-    expect(data.message).toBe('Message sent successfully')
-    expect(response.status).toBe(200)
+    expect(data.success).toBe(false)
+    expect(data.error).toContain('could not be delivered')
+    expect(response.status).toBe(503)
   })
 
   it('should return 500 on unexpected error', async () => {
