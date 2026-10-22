@@ -1,0 +1,68 @@
+name: Quality
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm type-check
+      - run: pnpm test
+      - run: pnpm audit --prod --audit-level=high
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
+      - run: pnpm test:e2e
+      - name: Verify article rendering against isolated fixture build
+        run: pnpm build && pnpm exec playwright test -g 'article fixture|analytics'
+        env:
+          CONTENT_DIRECTORY: tests/fixtures/articles
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: G-TEST123
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: |
+            playwright-report
+            test-results
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - uses: grafana/setup-k6-action@v1
+        with:
+          k6-version: '2.3.0'
+      - name: Production smoke and short baseline/load
+        run: |
+          mkdir -p tests/performance/results
+          pnpm start > /tmp/z-card-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:3000/api/health && break; sleep 1; done
+          export COMMIT_SHA="$GITHUB_SHA" NODE_VERSION="$(node --version)" NEXT_VERSION="$(node -p "require('next/package.json').version")" K6_VERSION="$(k6 version)" TEST_ENVIRONMENT="GitHub hosted ubuntu-latest" RESOURCE_LIMITS="shared runner; no container cap"
+          k6 run tests/performance/http.js
+          PROFILE=baseline RATE=5 DURATION=15s k6 run tests/performance/http.js
+          PROFILE=load RATE=10 DURATION=15s k6 run tests/performance/http.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-evidence
+          path: tests/performance/results

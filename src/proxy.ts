@@ -25,14 +25,22 @@ export function proxy(_request: NextRequest) {
   // Security Headers
   const scriptSrc = [
     "'self'",
-    "'unsafe-eval'",
+    ...(process.env.NODE_ENV === 'development' ? ["'unsafe-eval'"] : []),
     "'unsafe-inline'",
     'https://challenges.cloudflare.com',
     'https://static.cloudflareinsights.com',
+    'https://www.googletagmanager.com',
     umamiOrigin,
   ].filter(Boolean)
 
-  const connectSrc = ["'self'", 'https://challenges.cloudflare.com', umamiOrigin].filter(Boolean)
+  const connectSrc = [
+    "'self'",
+    'https://challenges.cloudflare.com',
+    'https://www.google-analytics.com',
+    'https://region1.google-analytics.com',
+    'https://www.googletagmanager.com',
+    umamiOrigin,
+  ].filter(Boolean)
 
   const securityHeaders = {
     // Content Security Policy
@@ -49,7 +57,7 @@ export function proxy(_request: NextRequest) {
       "base-uri 'self'",
       "form-action 'self'",
       "frame-ancestors 'none'",
-      'upgrade-insecure-requests',
+      ...(_request.nextUrl.protocol === 'https:' ? ['upgrade-insecure-requests'] : []),
     ].join('; '),
 
     // Prevent clickjacking

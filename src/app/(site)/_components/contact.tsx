@@ -9,6 +9,7 @@ import Section from '@/components/section'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import type { ContactFormResponse } from '@/types'
+import { trackEvent } from '@/lib/analytics'
 
 interface ContactProps {
   emailServicesAvailable: boolean
@@ -22,6 +23,7 @@ export default function Contact({ emailServicesAvailable, turnstileSiteKey }: Co
   const [honeypot, setHoneypot] = React.useState('')
   const [turnstileToken, setTurnstileToken] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
+  const [status, setStatus] = React.useState('')
   const [formLoadTime] = React.useState(() => Date.now())
   // Note: Client checks NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY to show widget
   // Server checks CLOUDFLARE_TURNSTILE_SECRET_KEY to verify tokens
@@ -66,11 +68,14 @@ export default function Contact({ emailServicesAvailable, turnstileSiteKey }: Co
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    trackEvent('contact_start')
+    setStatus('')
 
     // Client-side validation
     const validationError = validateForm()
     if (validationError) {
       toast.error(validationError)
+      setStatus(validationError)
       return
     }
 
@@ -86,6 +91,7 @@ export default function Contact({ emailServicesAvailable, turnstileSiteKey }: Co
     // If email services are not available, use mailto fallback
     if (!emailServicesAvailable) {
       const mailtoUrl = generateMailtoUrl()
+      setStatus('Opening your email application. Your message has not been sent by this website.')
       window.location.href = mailtoUrl
       return
     }
@@ -116,18 +122,22 @@ export default function Contact({ emailServicesAvailable, turnstileSiteKey }: Co
 
       if (!response.ok || !data.success) {
         toast.error(data.error || 'Failed to send message. Please try again.')
+        setStatus(data.error || 'Failed to send message. Please try again.')
         setSubmitting(false)
         return
       }
 
       // Success
       toast.success("Message sent successfully! I'll get back to you soon.")
+      setStatus('Message sent successfully.')
+      trackEvent('contact_success')
       setName('')
       setEmail('')
       setMessage('')
       setHoneypot('')
       setTurnstileToken(null) // Reset Turnstile token
     } catch (err) {
+      setStatus('Message could not be sent. Check your connection or email hi@zacky.id.')
       toast.error(
         err instanceof Error
           ? `Network error: ${err.message}`
@@ -141,13 +151,8 @@ export default function Contact({ emailServicesAvailable, turnstileSiteKey }: Co
   return (
     <Section id='contact'>
       <div>
-        <div className='mb-5 flex flex-wrap items-center gap-2 text-[11px] md:text-xs'>
-          <span className='rounded-full border px-2.5 py-0.5'>Contact</span>
-          <span className='rounded-full border px-2.5 py-0.5'>Let’s talk</span>
-        </div>
-
         <h2 className='text-2xl font-semibold tracking-tight text-balance sm:text-3xl lg:text-4xl'>
-          Get in touch
+          Send a message
         </h2>
         <p className='text-muted-foreground mt-2 max-w-2xl text-sm text-pretty sm:text-base lg:text-[17px]'>
           Have a project in mind, a question, or just want to say hi? Drop a message — I’ll get back
@@ -270,12 +275,19 @@ export default function Contact({ emailServicesAvailable, turnstileSiteKey }: Co
                   className='w-full sm:w-auto'
                 >
                   <Send className='mr-2 size-4' aria-hidden='true' />
-                  {submitting ? 'Sending…' : 'Send'}
+                  {submitting
+                    ? 'Sending…'
+                    : emailServicesAvailable
+                      ? 'Send message'
+                      : 'Open email application'}
                 </Button>
                 <span className='sr-only' aria-live='polite'>
                   {submitting ? 'Sending message…' : ''}
                 </span>
               </CardFooter>
+              <p role='status' className='px-6 pb-6 text-sm'>
+                {status}
+              </p>
             </form>
           </Card>
         </div>

@@ -57,7 +57,7 @@ describe('sendContactEmail', () => {
     const callArgs = mockSendMail.mock.calls[0]?.[0]
     expect(callArgs).toMatchObject(
       expect.objectContaining({
-        from: expect.stringContaining('John Doe'),
+        from: { name: 'John Doe', address: 'from@example.com' },
         to: 'to@example.com',
         replyTo: 'john@example.com',
         subject: expect.stringContaining('John Doe'),
@@ -82,7 +82,7 @@ describe('sendContactEmail', () => {
     expect(callArgs?.html).toContain('&lt;script&gt;')
     expect(callArgs?.html).toContain('&lt;b&gt;')
     expect(callArgs?.subject).not.toContain('<script>')
-    expect(callArgs?.subject).toContain('&lt;script&gt;')
+    expect(callArgs?.subject).not.toMatch(/[<>\r\n]/)
   })
 
   it('should preserve newlines in HTML email message', async () => {
@@ -115,6 +115,18 @@ describe('sendContactEmail', () => {
     expect(callArgs?.text).toContain('John Doe')
     expect(callArgs?.text).toContain('john@example.com')
     expect(callArgs?.text).toContain('Test message')
+  })
+
+  it('preserves valid reply addresses longer than 100 characters', async () => {
+    mockSendMail.mockResolvedValue({ messageId: 'long-address-test' })
+    const email = `${'a'.repeat(64)}@${'b'.repeat(50)}.example.com`
+    const result = await sendContactEmail({
+      name: 'Test Person',
+      email,
+      message: 'A test message.',
+    })
+    expect(result.success).toBe(true)
+    expect(mockSendMail.mock.calls[0]?.[0].replyTo).toBe(email)
   })
 
   it('should return error when email sending fails', async () => {
@@ -187,8 +199,8 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(true)
-    expect(result.warning).toContain('SMTP is not configured')
+    expect(result.success).toBe(false)
+    expect(result.error).toBe('Email delivery is unavailable')
     process.env.SMTP_HOST = originalHost
   })
 
@@ -204,8 +216,8 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(true)
-    expect(result.warning).toContain('SMTP is not configured')
+    expect(result.success).toBe(false)
+    expect(result.error).toBe('Email delivery is unavailable')
     process.env.SMTP_PORT = originalPort
   })
 
@@ -259,8 +271,8 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(true)
-    expect(result.warning).toContain('SMTP is not configured')
+    expect(result.success).toBe(false)
+    expect(result.error).toBe('Email delivery is unavailable')
     process.env.SMTP_FROM_EMAIL = originalFrom
   })
 
@@ -276,8 +288,8 @@ describe('sendContactEmail', () => {
       message: 'Test message',
     })
 
-    expect(result.success).toBe(true)
-    expect(result.warning).toContain('SMTP is not configured')
+    expect(result.success).toBe(false)
+    expect(result.error).toBe('Email delivery is unavailable')
     process.env.SMTP_TO_EMAIL = originalTo
   })
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Download } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
@@ -68,15 +68,7 @@ export function DigitalCard({
   const email = d.email
   const website = useMemo(() => buildWebsite(d.websiteHost), [d.websiteHost])
 
-  const [qrValue, setQrValue] = useState<string>('')
-  useEffect(() => {
-    if (!open) return
-    if (qrMode === 'url' && safeUrl) {
-      setQrValue(safeUrl)
-    } else {
-      setQrValue(buildVCard(d))
-    }
-  }, [open, qrMode, safeUrl, d])
+  const qrValue = qrMode === 'url' && safeUrl ? safeUrl : buildVCard(d)
 
   const handleDownloadVcf = () => {
     const vcard = buildVCard(d)

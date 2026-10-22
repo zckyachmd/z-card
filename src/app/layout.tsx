@@ -1,127 +1,37 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
-import { headers } from 'next/headers'
-import Script from 'next/script'
-import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-
+import { Geist } from 'next/font/google'
 import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
 import SkipLink from '@/components/skip-link'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
-
+import { AnalyticsConsent } from '@/components/analytics-consent'
+import { JsonLd } from '@/components/editorial'
+import { site } from '@/config/site'
 import './globals.css'
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-  preload: true,
-  fallback: ['system-ui', 'arial'],
-})
-
-const umamiWebsiteId = process.env.UMAMI_WEBSITE_ID ?? process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
-const umamiBaseUrl = process.env.UMAMI_URL ?? process.env.NEXT_PUBLIC_UMAMI_URL
-const umamiScriptPath =
-  process.env.UMAMI_SCRIPT_PATH ?? process.env.NEXT_PUBLIC_UMAMI_SCRIPT_PATH ?? '/script.js'
-const umamiDomains = process.env.UMAMI_DOMAINS ?? process.env.NEXT_PUBLIC_UMAMI_DOMAINS
-const umamiAutoTrackDisabled =
-  (process.env.UMAMI_AUTO_TRACK ?? process.env.NEXT_PUBLIC_UMAMI_AUTO_TRACK) === 'false'
-const umamiScriptSrc = umamiBaseUrl
-  ? `${umamiBaseUrl.replace(/\/$/, '')}${
-      umamiScriptPath.startsWith('/') ? umamiScriptPath : `/${umamiScriptPath}`
-    }`
-  : null
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-}
-
+const sans = Geist({ subsets: ['latin'], variable: '--font-interface', display: 'swap' })
+export const viewport: Viewport = { width: 'device-width', initialScale: 1 }
 export const metadata: Metadata = {
-  title: 'Zacky Achmad — Full-Stack Web Developer',
+  metadataBase: new URL(site.website),
+  title: { default: 'Zacky Achmad — Software Engineer', template: '%s | Zacky Achmad' },
   description:
-    'Portfolio of Zacky Achmad, a back-end leaning full-stack web developer based in Jakarta, Indonesia. Clean, secure, and efficient systems.',
-  metadataBase: new URL('https://zacky.id'),
-  alternates: { canonical: '/' },
-  keywords: [
-    'Full-Stack Developer',
-    'Web Developer',
-    'Portfolio',
-    'Indonesia',
-    'Jakarta',
-    'Backend Developer',
-    'Frontend Developer',
-    'Software Engineer',
-  ],
-  authors: [{ name: 'Zacky Achmad', url: 'https://zacky.id' }],
-  creator: 'Zacky Achmad',
-  publisher: 'Zacky Achmad',
-  category: 'Portfolio',
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+    'Software engineer in Indonesia. Business applications, integrations, and practical software.',
+  authors: [{ name: 'Zacky Achmad', url: `${site.website}/about` }],
+  alternates: { types: { 'application/rss+xml': '/feed.xml' } },
   openGraph: {
-    title: 'Zacky Achmad — Full-Stack Web Developer',
-    description: 'Clean, secure, and efficient systems. Based in Jakarta, Indonesia.',
-    url: '/',
-    siteName: 'zacky.id',
     type: 'website',
+    siteName: 'zacky.id',
     locale: 'en_US',
-    images: [
-      {
-        url: '/opengraph-image',
-        width: 1200,
-        height: 630,
-        alt: 'Zacky Achmad - Full-Stack Web Developer Portfolio',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Zacky Achmad — Full-Stack Web Developer',
-    description: 'Clean, secure, and efficient systems.',
     images: ['/opengraph-image'],
   },
-  icons: {
-    icon: [
-      { url: '/favicon/favicon.ico' },
-      { url: '/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-    ],
-    apple: [{ url: '/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
-    other: [
-      {
-        rel: 'android-chrome',
-        url: '/favicon/android-chrome-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        rel: 'android-chrome',
-        url: '/favicon/android-chrome-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      { rel: 'manifest', url: '/manifest.json' },
-    ],
-  },
+  twitter: { card: 'summary_large_image', images: ['/opengraph-image'] },
+  robots: { index: true, follow: true },
+  icons: { icon: '/favicon/favicon.ico', apple: '/favicon/apple-touch-icon.png' },
 }
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  headers()
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={sans.variable}>
         <SkipLink />
         <ThemeProvider
           attribute='class'
@@ -130,21 +40,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <Navbar />
-          <main id='main-content'>{children}</main>
+          <main id='main-content' tabIndex={-1}>
+            {children}
+          </main>
           <Footer />
+          <AnalyticsConsent />
+          <Toaster />
         </ThemeProvider>
-        <Toaster />
-        {umamiWebsiteId && umamiScriptSrc ? (
-          <Script
-            src={umamiScriptSrc}
-            data-website-id={umamiWebsiteId}
-            data-domains={umamiDomains}
-            data-auto-track={umamiAutoTrackDisabled ? 'false' : undefined}
-            async
-          />
-        ) : null}
-        <Analytics />
-        <SpeedInsights />
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            '@id': `${site.website}/#website`,
+            name: 'Zacky Achmad',
+            url: site.website,
+          }}
+        />
       </body>
     </html>
   )

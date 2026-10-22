@@ -54,7 +54,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            VITE_APP_NAME=${{ vars.VITE_APP_NAME }}
-            VITE_BASE_URL=${{ vars.VITE_BASE_URL }}
-            VITE_API_URL=${{ vars.VITE_API_URL }}
-            VITE_ENV=${{ vars.VITE_ENV }}
+            NEXT_PUBLIC_GA_MEASUREMENT_ID=${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}

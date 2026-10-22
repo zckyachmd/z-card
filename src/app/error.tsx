@@ -29,7 +29,7 @@ export default function Error({
             Something went wrong
           </h1>
           <p className='text-muted-foreground max-w-2xl text-base sm:text-lg'>
-            We encountered an unexpected error. Don&apos;t worry, we&apos;re on it!
+            This page could not load. Try again, or return to the homepage.
           </p>
           {error.digest && (
             <p className='text-muted-foreground text-sm'>

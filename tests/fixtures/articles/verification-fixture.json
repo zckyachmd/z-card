@@ -1,0 +1,10 @@
+{
+  "slug": "verification-fixture",
+  "title": "Publishing verification fixture",
+  "description": "Test-only content for rendering checks. Not an authored publication.",
+  "publishedAt": "2020-01-01",
+  "updatedAt": "2020-01-02",
+  "draft": false,
+  "category": "Test fixtures",
+  "tags": ["verification"]
+}

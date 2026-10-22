@@ -1,43 +1,65 @@
 'use client'
-
+import { useState } from 'react'
 import Link from 'next/link'
-
-import { site } from '@/config/site'
-
+import { usePathname } from 'next/navigation'
+import { Menu, X } from 'lucide-react'
+import { CommandMenu } from '@/components/command-menu'
+const links = [
+  ['/about', 'About'],
+  ['/projects', 'Projects'],
+  ['/blog', 'Journal'],
+  ['/contact', 'Contact'],
+] as const
 export default function Navbar() {
+  const [open, setOpen] = useState(false)
+  const pathname = usePathname()
   return (
-    <>
-      <header className='bg-background/80 sticky top-0 z-40 w-full border-b backdrop-blur'>
-        <div className='mx-auto flex h-14 max-w-5xl items-center justify-between px-4'>
-          <Link href='/' className='font-medium' aria-label='Go to homepage'>
-            {`${site.name.first} ${site.name.last}`}
-          </Link>
-
-          <nav aria-label='Main navigation' className='flex items-center gap-3'>
-            <Link
-              href='#about'
-              className='text-muted-foreground hover:text-foreground text-sm'
-              aria-label='Navigate to about section'
-            >
-              About
-            </Link>
-            <Link
-              href='#projects'
-              className='text-muted-foreground hover:text-foreground text-sm'
-              aria-label='Navigate to projects section'
-            >
-              Projects
-            </Link>
-            <Link
-              href='#contact'
-              className='text-muted-foreground hover:text-foreground text-sm'
-              aria-label='Navigate to contact section'
-            >
-              Contact
-            </Link>
-          </nav>
+    <header className='site-header'>
+      <div className='site-container header-inner'>
+        <Link
+          href='/'
+          className='wordmark'
+          aria-label='zacky.id — Zacky Achmad home'
+          onClick={() => setOpen(false)}
+        >
+          zacky<span>.id</span>
+        </Link>
+        <div className='header-utilities'>
+          <CommandMenu />
         </div>
-      </header>
-    </>
+        <button
+          className='menu-toggle'
+          type='button'
+          aria-expanded={open}
+          aria-controls='primary-navigation'
+          aria-label={open ? 'Close navigation' : 'Open navigation'}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X aria-hidden='true' size={22} /> : <Menu aria-hidden='true' size={22} />}
+        </button>
+        <nav
+          id='primary-navigation'
+          className={open ? 'primary-navigation is-open' : 'primary-navigation'}
+          aria-label='Main navigation'
+          onKeyDown={event => {
+            if (event.key === 'Escape') {
+              setOpen(false)
+              document.querySelector<HTMLButtonElement>('.menu-toggle')?.focus()
+            }
+          }}
+        >
+          {links.map(([href, label]) => (
+            <Link
+              key={href}
+              href={href}
+              aria-current={pathname.startsWith(href) ? 'page' : undefined}
+              onClick={() => setOpen(false)}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </header>
   )
 }
