@@ -114,5 +114,9 @@ test('article fixture renders safely when fixture build is selected', async ({ p
   await expect(page.getByRole('navigation', { name: 'Table of contents' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Copy code' })).toBeVisible()
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article')
+  expect(
+    (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
+      .violations,
+  ).toEqual([])
   expect(await (await request.get('/feed.xml')).text()).toContain('verification-fixture')
 })

@@ -29,7 +29,24 @@ function sample() {
             { encoding: 'utf8' },
           ).trim()
         : 'RSS in KiB; CPU is ps lifetime average, not instantaneous saturation; no container limits/restarts'
-    fs.appendFileSync(output, JSON.stringify({ timestamp, kind, target, metrics, state }) + '\n')
+    const rss =
+      kind === 'container'
+        ? execFileSync(
+            'docker',
+            [
+              'exec',
+              target,
+              'node',
+              '-e',
+              'process.stdout.write(require("node:fs").readFileSync("/proc/1/status","utf8").split("\\n").filter(line=>/^Vm(RSS|HWM):/.test(line)).join("; "))',
+            ],
+            { encoding: 'utf8' },
+          ).trim()
+        : undefined
+    fs.appendFileSync(
+      output,
+      JSON.stringify({ timestamp, kind, target, metrics, state, rss }) + '\n',
+    )
   } catch (error) {
     fs.appendFileSync(output, JSON.stringify({ timestamp, error: String(error) }) + '\n')
     process.exitCode = 1

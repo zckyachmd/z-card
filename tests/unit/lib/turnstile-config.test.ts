@@ -29,11 +29,11 @@ describe('Turnstile Configuration', () => {
       expect(areEmailServicesAvailable()).toBe(true)
     })
 
-    it('should return true when Turnstile is fully configured', () => {
+    it('should not claim mail delivery when only Turnstile is configured', () => {
       process.env.CLOUDFLARE_TURNSTILE_SITE_KEY = 'site-key'
       process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY = 'secret-key'
 
-      expect(areEmailServicesAvailable()).toBe(true)
+      expect(areEmailServicesAvailable()).toBe(false)
     })
 
     it('should return true when both SMTP and Turnstile are configured', () => {

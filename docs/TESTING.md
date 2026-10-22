@@ -8,6 +8,8 @@ For a real article-detail rendering check without publishing sample writing: `CO
 
 For manual accessibility review, Tab through the skip link, navigation, theme, skill nodes, forms and dialogs. Confirm focus restoration and Escape behavior. Check both themes, 320/375px phones, tablet, laptop and wide desktop, 200% zoom, visible errors, reduced motion and text resizing. Axe findings are evidence, not a full WCAG conformance claim. Screen-reader behavior requires manual validation with actual assistive technology.
 
+On macOS WebKit, Option+Tab follows the platform convention for link focus when full keyboard access is disabled. The automated skip-link journey accounts for that convention. Local Firefox 1555 failed before opening a page with `Could not find profile folder`; the project remains enabled in CI rather than being silently disabled.
+
 Performance: use tests/performance/README.md. Run k6 smoke/baseline/load against production, capture resource samples separately, retain actual summaries and report environment details. Browser vitals are synthetic and do not establish field Core Web Vitals. Stress/spike/soak are manual isolated-environment profiles. No contact POST traffic is generated.
 
 CI workflow contains these gates; a committed workflow is not a verified CI run. Record exact commands/results and environmental limitations in the delivery report. Never report blocked tests as passed.

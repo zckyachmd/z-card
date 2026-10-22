@@ -135,6 +135,10 @@
   --accent: #e1eafa;
   --accent-foreground: #162238;
   --ring: #225ab5;
+  --popover: #ffffff;
+  --popover-foreground: #162238;
+  --secondary: #eaf0f7;
+  --secondary-foreground: #162238;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
@@ -152,6 +156,10 @@
   --accent: #233249;
   --accent-foreground: #edf2fa;
   --ring: #93b9ff;
+  --popover: #1b2636;
+  --popover-foreground: #edf2fa;
+  --secondary: #233249;
+  --secondary-foreground: #edf2fa;
 }
 html {
   scroll-behavior: smooth;

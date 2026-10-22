@@ -7,6 +7,7 @@ if (
 )
   throw new Error('Remote browser test requires ALLOW_REMOTE=true')
 export const options = {
+  summaryTrendStats: ['avg', 'min', 'med', 'p(75)', 'p(90)', 'p(95)', 'p(99)', 'max'],
   scenarios: {
     browser: {
       executor: 'shared-iterations',
@@ -25,7 +26,7 @@ export default async function browserJourney() {
   const page = await browser.newPage()
   try {
     await page.goto(base)
-    await page.locator('a[href="/projects"]').first().click()
+    await page.locator('header a[href="/projects"]').click()
     check(await page.title(), { 'projects rendered': title => title.includes('Projects') })
     await page.waitForTimeout(1000)
   } finally {

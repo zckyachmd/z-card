@@ -33,3 +33,5 @@ Public NEXT_PUBLIC variables are compiled into the image and require rebuilding.
 GHCR workflow publishes main after push; quality workflow verifies PRs. Require Quality checks in repository branch protection before merging. The agent does not merge automatically. Roll back by deploying the previous image SHA; content and code travel together.
 
 Docker execution is only verified when a working daemon can build and run the image. CLI availability alone is insufficient; see the delivery/performance evidence for actual status.
+
+The local daemon was subsequently started and a production image built successfully. A non-root read-only container with a writable image-cache tmpfs reached healthy state with zero restarts under 2 CPU / 1GiB limits. This verifies the local container path; it does not verify the public reverse proxy, DNS, SMTP credentials, or production CI permissions.

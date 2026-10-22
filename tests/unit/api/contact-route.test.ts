@@ -380,3 +380,23 @@ describe('GET /api/contact', () => {
     expect(response.status).toBe(405)
   })
 })
+
+describe('contact payload size boundary', () => {
+  it('rejects UTF-8 bodies by bytes even without Content-Length', async () => {
+    const { checkRateLimit, getClientIP } = await import('@/lib/rate-limit')
+    vi.mocked(getClientIP).mockReturnValue('127.0.0.1')
+    vi.mocked(checkRateLimit).mockReturnValue({
+      allowed: true,
+      remaining: 4,
+      resetAt: Date.now() + 60000,
+    })
+    const response = await POST(
+      new Request('http://localhost/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '😀'.repeat(300000),
+      }),
+    )
+    expect(response.status).toBe(413)
+  })
+})

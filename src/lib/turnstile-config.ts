@@ -47,9 +47,8 @@ function isSMTPConfigured(): boolean {
 }
 
 /**
- * Check if email services are available (SMTP configured or Turnstile configured)
- * Returns true if either SMTP or Turnstile is configured (meaning form can be submitted)
- * Returns false if neither is configured (meaning should fallback to mailto)
+ * Delivery needs SMTP; bot verification alone cannot deliver a message.
+ * Without SMTP, the UI offers an explicit email-client fallback.
  * Note: This function accesses server environment variables and should not be used in client components
  */
 export function areEmailServicesAvailable(): boolean {

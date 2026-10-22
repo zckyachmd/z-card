@@ -69,7 +69,7 @@ function getTransporter(): Transporter | null {
 
 /**
  * Send contact form email
- * Returns success even if SMTP is not configured (logs to console instead)
+ * Returns failure if SMTP is unavailable; no message content is logged.
  */
 export async function sendContactEmail(
   data: ContactFormData,
@@ -77,7 +77,7 @@ export async function sendContactEmail(
 ): Promise<{ success: boolean; error?: string; warning?: string }> {
   const mailTransporter = getTransporter()
 
-  // If SMTP is not configured, log to console and return success
+  // The caller must report delivery unavailability honestly.
   if (!mailTransporter) {
     return {
       success: false,

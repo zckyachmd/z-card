@@ -219,8 +219,7 @@ export async function POST(request: Request) {
 
     const emailResult = await sendContactEmail(emailData, emailMetadata)
 
-    // If email sending fails, still return success but log the error
-    // This allows form submissions even when SMTP is misconfigured
+    // A transport failure must not be reported as a delivered message.
     if (!emailResult.success) {
       console.error('Contact email delivery failed')
       return NextResponse.json(
